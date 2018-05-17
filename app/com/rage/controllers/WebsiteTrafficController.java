@@ -15,6 +15,7 @@ import com.rage.models.website.csv.mapping.CsvWebsiteMapping;
 import com.rage.models.website.csv.mapping.service.CsvWebsiteMappingService;
 import com.rage.utils.RootClass;
 
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -52,7 +53,28 @@ public class WebsiteTrafficController extends Controller {
 				mainReportServ.addMainReport(mainReport);
 			});
 		}
-		return ok();
+		return ok(Json.toJson(mainReportList));
+	}
+	public Result findWebsiteTrafficWithCsvId(String csvId) {
+		Csv latestCsvData = csvServ.getCsvDetailById(csvId);
+		System.out.println("CsvData :: " + latestCsvData);
+		List<CsvWebsiteMapping> csvWebsiteMapping = csvWebsiteMappingServ
+				.getCsvWebsiteMapping(latestCsvData.getId().toString());
+		List<String> websiteUrlList = new ArrayList<>();
+		csvWebsiteMapping.forEach(website -> {
+			if (website != null && website.getWebsite() != null && !website.getWebsite().getUrl().isEmpty()) {
+				String url = website.getWebsite().getUrl();
+				websiteUrlList.add(url);
+			}
+		});
+		List<MainReport> mainReportList = RootClass.getData(websiteUrlList);
+		if (!mainReportList.isEmpty()) {
+			mainReportList.forEach(mainReport -> {
+				mainReport.setCsvId(latestCsvData.getId());
+				mainReportServ.addMainReport(mainReport);
+			});
+		}
+		return ok(Json.toJson(mainReportList));
 	}
 
 }
