@@ -16,8 +16,13 @@ libraryDependencies ++= Seq(
  "org.mongodb" % "mongo-java-driver" % "3.2.2",
  "org.assertj" % "assertj-core" % "3.6.2" % Test,
  "org.awaitility" % "awaitility" % "2.0.0" % Test,
- //"org.avaje.ebeanorm" % "avaje-ebeanorm" % "8.1.1",
  "com.google.inject" % "guice" % "4.2.0",
+ 
+ //for selenium
+ "org.seleniumhq.selenium" % "selenium-server" % "3.12.0",
+ 
+ "org.jsoup" % "jsoup" % "1.10.2",
+ 
  
  "mysql" % "mysql-connector-java" % "5.1.36"
 )

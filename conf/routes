@@ -14,7 +14,12 @@ GET		/csv									com.rage.controllers.CsvController.getCsvDataList
 GET		/csv/:csvId								com.rage.controllers.CsvController.getCsvDetailsById(csvId : String)
 
 #Csv Website Mapping
-GET		/mapping/:csvId								com.rage.controllers.CsvWebsiteMappingController.getcsvWebsiteMappingList(csvId : String)
+GET		/mapping/:csvId							com.rage.controllers.CsvWebsiteMappingController.getcsvWebsiteMappingList(csvId : String)
+
+
+#Website traffic
+GET		/website/traffic						com.rage.controllers.WebsiteTrafficController.findWebsiteTraffic
+
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
