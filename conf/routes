@@ -1,0 +1,20 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+#website
+GET 	/										com.rage.controllers.WebsiteController.sayHi
+POST 	/website								com.rage.controllers.WebsiteController.addWebsites
+GET 	/website								com.rage.controllers.WebsiteController.getWebsiteByUrl
+
+#Csv
+
+GET		/csv/latest								com.rage.controllers.CsvController.getLatestCsvData
+GET		/csv									com.rage.controllers.CsvController.getCsvDataList
+GET		/csv/:csvId								com.rage.controllers.CsvController.getCsvDetailsById(csvId : String)
+
+#Csv Website Mapping
+GET		/mapping/:csvId								com.rage.controllers.CsvWebsiteMappingController.getcsvWebsiteMappingList(csvId : String)
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
