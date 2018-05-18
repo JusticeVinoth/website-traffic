@@ -1,14 +1,19 @@
 package com.rage.controllers;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
+import org.apache.commons.io.FileUtils;
+
+import com.fasterxml.jackson.databind.JsonNode;
 import com.google.inject.Inject;
 import com.rage.models.csv.Csv;
 import com.rage.models.csv.service.CsvService;
@@ -17,7 +22,10 @@ import com.rage.models.website.csv.mapping.CsvWebsiteMapping;
 import com.rage.models.website.csv.mapping.service.CsvWebsiteMappingService;
 import com.rage.models.website.service.WebsiteService;
 
+import play.libs.Json;
 import play.mvc.Controller;
+import play.mvc.Http;
+import play.mvc.Http.MultipartFormData;
 import play.mvc.Result;
 
 public class WebsiteController extends Controller {
@@ -32,7 +40,8 @@ public class WebsiteController extends Controller {
 	public CsvWebsiteMappingService csvWebsiteMappingServ;
 
 	public Result sayHi() {
-		return ok();
+		
+		return ok(com.rage.views.html.cvupload.render());
 	}
 
 	public Result addWebsites() throws IOException {
@@ -93,4 +102,21 @@ public class WebsiteController extends Controller {
 		return ok();
 	}
 
+	public Result uploadCsvFile() throws IOException {
+		System.out.println();
+		Http.MultipartFormData<File> body = request().body().asMultipartFormData();
+	    Http.MultipartFormData.FilePart<File> csvFile = body.getFile("csvFile");
+	    if (csvFile != null) {
+	        String fileName = csvFile.getFilename();
+	        System.out.println("fileName ::: "+fileName);
+	        String contentType = csvFile.getContentType();
+	        File file = csvFile.getFile();
+	        FileUtils.moveFile(file, new File("public/uploadFile", fileName));
+	        return ok("File uploaded");
+	    } else {
+	        flash("error", "Missing file");
+	        return ok("Missing file");
+	    }
+	}
+	
 }

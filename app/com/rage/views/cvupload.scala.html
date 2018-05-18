@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+		
+					
+	<form action="@com.rage.controllers.routes.WebsiteController.uploadCsvFile()" method="post" enctype="multipart/form-data">
+        @helper.CSRF.formField
+        <input type="file" name="picture">
+        <button type="submit">Add</button>
+    </form>
+</body>
+</html>

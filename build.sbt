@@ -18,6 +18,8 @@ libraryDependencies ++= Seq(
  "org.awaitility" % "awaitility" % "2.0.0" % Test,
  "com.google.inject" % "guice" % "4.2.0",
  
+ "org.apache.directory.studio" % "org.apache.commons.io" % "2.4",
+ 
  //for selenium
  "org.seleniumhq.selenium" % "selenium-server" % "3.12.0",
  

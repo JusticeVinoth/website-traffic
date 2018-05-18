@@ -8,7 +8,6 @@ com.fasterxml.jackson.databind.JsonNode)
 <link rel="stylesheet" href="/assets/css/custom.css">
 <script type='text/javascript' src="/assets/js/bootstrap.min.js"></script>
 <script type='text/javascript' src="/assets/js/jquery-3.3.1.js"></script>
-
 </head>
 
 <body>
@@ -34,23 +33,22 @@ com.fasterxml.jackson.databind.JsonNode)
 	<!-- container end -->
 
 	<!-- Upload file -->
+	
 	<div class="site-container report">
 
 		<div class="row">
-
-			<div class="panel-group">
-				<div class="panel panel-success">
+			<div class="panel-group">		<div class="panel panel-success">
 					<div class="panel-heading">Upload a file here</div>
 					<div class="panel-body">
-						<div class="upload-container">
-							<input type="file" id="myFile" multiple size="50"
-								class="btn btn-info btn-sm">
-						</div>
-
-					</div>
+					<form class="dropzone" action="@com.rage.controllers.routes.WebsiteController.uploadCsvFile()" method="post" enctype="multipart/form-data">
+        				@helper.CSRF.formField
+        				<div class="upload-container">
+        					<input class="btn btn-info btn-sm" type="file" name="csvFile">
+        				</div>
+       					<button class="btn btn-primary btn-xs autoshift-uploadButton" type="submit">Upload Document</button>
+    				</form>
 				</div>
 			</div>
-
 		</div>
 
 		<!-- site  traffic report-->

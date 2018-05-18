@@ -6,6 +6,7 @@
 GET 	/										com.rage.controllers.WebsiteController.sayHi
 POST 	/website								com.rage.controllers.WebsiteController.addWebsites
 GET 	/website								com.rage.controllers.WebsiteController.getWebsiteByUrl
+POST		/fileupload									com.rage.controllers.WebsiteController.uploadCsvFile
 
 #Csv
 

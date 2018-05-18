@@ -1,0 +1,20 @@
+.dataTables_filter {
+   width: 50%;
+   float: right;
+   text-align: right;
+}
+
+.tag {
+    margin-right: 2px;
+    color: #FFF;
+}
+#datatable1_length{
+        display: none;
+}
+.required_label :after {
+content: '*';
+color: #EF5F5F;
+font-family: 'Glyphicons Halflings';
+font-weight: normal;
+font-size: 14px;
+}
