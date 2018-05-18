@@ -23,22 +23,34 @@ public class CsvRepositoryImpl implements CsvRepository {
 			return csv;
 		}
 		return null;
-		
+
 	}
 
 	@Override
 	public Csv getLatestCsvDetails() {
-		return Ebean.find(Csv.class).orderBy("createdTime desc").findList().get(0);
+		List<Csv> csvList = Ebean.find(Csv.class).orderBy("createdTime desc").findList();
+		if (!csvList.isEmpty()) {
+			return csvList.get(0);
+		}
+		return null;
 	}
 
 	@Override
 	public List<Csv> getCsvList() {
-		return Ebean.find(Csv.class).findList();
+		List<Csv> csvList = Ebean.find(Csv.class).orderBy("createdTime desc").findList();
+		if (!csvList.isEmpty()) {
+			return csvList;
+		}
+		return null;
 	}
 
 	@Override
 	public Csv getCsvDetailById(String csvId) {
-		return Ebean.find(Csv.class).where().eq("id", csvId).findOne();
+		Csv csv = Ebean.find(Csv.class).where().eq("id", csvId).findOne();
+		if (csv != null) {
+			return csv;
+		}
+		return null;
 	}
 
 }

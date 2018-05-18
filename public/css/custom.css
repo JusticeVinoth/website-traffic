@@ -1,0 +1,24 @@
+.left{
+	padding-left: 130px;
+}
+.rught{
+	padding-right: 125px;
+}
+.bottom{
+	padding-left: 130px;
+	padding-right: 125px;
+}
+.icon-traffic{
+	width: 20px;
+}
+.report{
+	padding-right: 118px;
+	padding-left: 118px;
+}
+
+.footer {
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   text-align: center;
+}

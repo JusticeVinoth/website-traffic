@@ -9,7 +9,7 @@ import com.google.inject.Inject;
 import com.rage.models.website.csv.mapping.CsvWebsiteMapping;
 import com.rage.models.website.csv.mapping.service.CsvWebsiteMappingService;
 
-import io.ebean.Ebean;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -24,7 +24,10 @@ public class CsvWebsiteMappingController extends Controller {
 
 	public Result getcsvWebsiteMappingList(String csvId) {
 		List<CsvWebsiteMapping> csvWebsiteMappingList = csvWebsiteMappingServ.getCsvWebsiteMapping(csvId);
-		return ok(Ebean.json().toJson(csvWebsiteMappingList));
+		if (!csvWebsiteMappingList.isEmpty()) {
+			return ok(Json.toJson(csvWebsiteMappingList));
+		}
+		return ok();
 	}
 
 }

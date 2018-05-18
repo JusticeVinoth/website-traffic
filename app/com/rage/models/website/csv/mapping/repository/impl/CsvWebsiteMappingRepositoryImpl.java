@@ -20,7 +20,10 @@ public class CsvWebsiteMappingRepositoryImpl implements CsvWebsiteMappingReposit
 	public List<CsvWebsiteMapping> getCsvWebsiteMappingByCsvId(String csvId) {
 		List<CsvWebsiteMapping> csvWebsiteMappingList = Ebean.find(CsvWebsiteMapping.class).fetch("website").where()
 				.eq("csv_id", csvId).findList();
-		return csvWebsiteMappingList;
+		if (!csvWebsiteMappingList.isEmpty()) {
+			return csvWebsiteMappingList;
+		}
+		return null;
 	}
 
 	@Override

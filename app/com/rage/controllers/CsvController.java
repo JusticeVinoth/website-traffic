@@ -25,17 +25,26 @@ public class CsvController extends Controller {
 	public Result getLatestCsvData() {
 		Csv latestCsvDetails = csvServ.getLatestCsvDetails();
 		System.out.println("website :: " + latestCsvDetails);
-		return ok(Json.toJson(latestCsvDetails));
+		if (latestCsvDetails != null) {
+			return ok(Json.toJson(latestCsvDetails));
+		}
+		return ok();
 	}
 
 	public Result getCsvDataList() {
 		List<Csv> csvList = csvServ.getCsvList();
 		csvList.forEach(System.out::println);
-		return ok(Json.toJson(csvList));
+		if (!csvList.isEmpty()) {
+			return ok(Json.toJson(csvList));
+		}
+		return ok();
 	}
-	
+
 	public Result getCsvDetailsById(String csvId) {
 		Csv csvData = csvServ.getCsvDetailById(csvId);
-		return ok(Json.toJson(csvData));
+		if (csvData != null) {
+			return ok(Json.toJson(csvData));
+		}
+		return ok();
 	}
 }

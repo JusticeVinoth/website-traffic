@@ -96,11 +96,4 @@ public class ProviderReport extends Model implements Serializable {
 		this.mainReport = mainReport;
 	}
 
-	@Override
-	public String toString() {
-		return "ProviderReport [id=" + id + ", searchSiteUrl=" + searchSiteUrl + ", siteName=" + siteName
-				+ ", trafficCount=" + trafficCount + ", mainReportId=" + mainReportId + ", mainReport=" + mainReport
-				+ "]";
-	}
-
 }

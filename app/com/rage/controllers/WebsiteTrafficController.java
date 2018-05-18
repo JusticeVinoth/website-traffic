@@ -55,6 +55,7 @@ public class WebsiteTrafficController extends Controller {
 		}
 		return ok(Json.toJson(mainReportList));
 	}
+
 	public Result findWebsiteTrafficWithCsvId(String csvId) {
 		Csv latestCsvData = csvServ.getCsvDetailById(csvId);
 		System.out.println("CsvData :: " + latestCsvData);
@@ -75,6 +76,22 @@ public class WebsiteTrafficController extends Controller {
 			});
 		}
 		return ok(Json.toJson(mainReportList));
+	}
+
+	public Result homeSite() {
+		List<Csv> csvList = csvServ.getCsvList();
+		Csv latestCsvData = csvServ.getLatestCsvDetails();
+		List<MainReport> mainReportList = new ArrayList<>();
+		if (latestCsvData != null && latestCsvData.getId() != null) {
+			String csvId = latestCsvData.getId().toString();
+			mainReportList.addAll(mainReportServ.getMainReport(csvId));
+		}
+		if (!csvList.isEmpty() && mainReportList != null) {
+			return ok(com.rage.views.html.index.render(Json.toJson(csvList), Json.toJson(mainReportList)));
+		} else if (!csvList.isEmpty() && csvList != null) {
+			return ok(com.rage.views.html.index.render(Json.toJson(csvList), null));
+		}
+		return ok(com.rage.views.html.index.render(null, null));
 	}
 
 }

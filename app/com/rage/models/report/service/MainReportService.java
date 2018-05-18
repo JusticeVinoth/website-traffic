@@ -3,6 +3,8 @@
  */
 package com.rage.models.report.service;
 
+import java.util.List;
+
 import com.google.inject.ImplementedBy;
 import com.rage.models.report.main.MainReport;
 import com.rage.models.report.service.impl.MainReportServiceImpl;
@@ -15,4 +17,6 @@ import com.rage.models.report.service.impl.MainReportServiceImpl;
 public interface MainReportService {
 	
 	public boolean addMainReport(MainReport mainReport);
+	
+	public List<MainReport> getMainReport(String csvId);
 }

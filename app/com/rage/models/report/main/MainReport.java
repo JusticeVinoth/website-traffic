@@ -56,7 +56,7 @@ public class MainReport extends Model implements Serializable {
 	private String twitterUrl;
 
 	@OneToMany
-	@JoinColumn(name = "provider_report_id", referencedColumnName = "id", nullable = false)
+	@JoinColumn(name = "main_report_id", referencedColumnName = "id", nullable = false)
 	private List<ProviderReport> providerReport;
 
 	public Long getId() {
@@ -131,6 +131,8 @@ public class MainReport extends Model implements Serializable {
 		this.twitterUrl = twitterUrl;
 	}
 
+	
+
 	public List<ProviderReport> getProviderReport() {
 		return providerReport;
 	}
@@ -139,12 +141,5 @@ public class MainReport extends Model implements Serializable {
 		this.providerReport = providerReport;
 	}
 
-	@Override
-	public String toString() {
-		return "MainReport [id=" + id + ", csvId=" + csvId + ", siteUrl=" + siteUrl + ", hasFbPage=" + hasFbPage
-				+ ", hasTwitterPage=" + hasTwitterPage + ", fbFollowers=" + fbFollowers + ", twitterFollowers="
-				+ twitterFollowers + ", fbUrl=" + fbUrl + ", twitterUrl=" + twitterUrl + ", providerReport="
-				+ providerReport + "]";
-	}
-
+	
 }
