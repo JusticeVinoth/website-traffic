@@ -20,11 +20,10 @@ public class MainReportRepositoryImpl implements MainReportRepository {
 	public boolean addMainReport(MainReport mainReport) {
 		if (mainReport != null) {
 			mainReport.save();
-			// mainReport.getProviderReport().forEach(providerReport -> {
-			// providerReport.setMainReportId(mainReport.getId());
-			// providerReport.save();
-			// });
-			Ebean.saveAll(mainReport.getProviderReport());
+			mainReport.getProviderReport().forEach(providerReport -> {
+				providerReport.setMainReportId(mainReport.getId());
+				providerReport.save();
+			});
 			return true;
 		}
 		return false;

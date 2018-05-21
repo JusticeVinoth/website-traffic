@@ -24,4 +24,8 @@ public interface CsvRepository {
 	public List<Csv> getCsvList();
 	
 	public Csv getCsvDetailById(String csvId);
+	
+	public Csv updateCsvReportStatusUsingId(String id);
+	
+	public boolean deleteCsvUsingId(String id);
 }

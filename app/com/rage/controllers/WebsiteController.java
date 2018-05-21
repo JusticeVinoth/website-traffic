@@ -8,24 +8,24 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 import org.apache.commons.io.FileUtils;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.google.inject.Inject;
 import com.rage.models.csv.Csv;
 import com.rage.models.csv.service.CsvService;
+import com.rage.models.report.main.MainReport;
+import com.rage.models.report.service.MainReportService;
 import com.rage.models.website.Website;
 import com.rage.models.website.csv.mapping.CsvWebsiteMapping;
 import com.rage.models.website.csv.mapping.service.CsvWebsiteMappingService;
 import com.rage.models.website.service.WebsiteService;
+import com.rage.utils.RootClass;
 
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
-import play.mvc.Http.MultipartFormData;
 import play.mvc.Result;
 
 public class WebsiteController extends Controller {
@@ -39,39 +39,93 @@ public class WebsiteController extends Controller {
 	@Inject
 	public CsvWebsiteMappingService csvWebsiteMappingServ;
 
+	@Inject
+	public MainReportService mainReportServ;
+
 	public Result sayHi() {
-		
-		return ok(com.rage.views.html.cvupload.render());
+		return ok();
 	}
 
 	public Result addWebsites() throws IOException {
-		List<Website> websiteList = csvFileRead();
-		websiteList.forEach(System.out::println);
-		List<Website> websiteUrlLst = websiteServ.addWebsiteUrl(websiteList);
-		Csv csv = new Csv();
-		csv.setFileName("website");
-		csv.setCreatedTime(new Date());
-		Csv csvDetails = csvServ.addCsvDetail(csv);
+		Http.MultipartFormData<File> body = request().body().asMultipartFormData();
+		Http.MultipartFormData.FilePart<File> csvFile = body.getFile("csvFile");
+		List<Csv> csvList = csvServ.getCsvList();
+		Date date = new Date();
+		String fName = csvFile.getFilename();
+		if (csvFile != null && !fName.isEmpty()) {
+			int lastIndex = fName.lastIndexOf(".");
+			String fileName = fName.substring(0, lastIndex);
+			File file = csvFile.getFile();
+			FileUtils.copyFile(file, new File("public/uploadFile", fileName + "" + date.getTime() + ".csv"));
+			List<Website> websiteList = csvFileRead(file);
+			List<Website> websiteUrlLst = websiteServ.addWebsiteUrl(websiteList);
+			Csv csvDetails = setCsvData(date, fileName);
+			List<CsvWebsiteMapping> csvWebsiteList = setCsvWebsiteMappingData(websiteUrlLst, csvDetails);
+			csvWebsiteMappingServ.addCsvWebsiteMapping(csvWebsiteList);
+			List<MainReport> mainReportList = reportGenerate(csvDetails);
+			flash("success", "File uploaded successfully");
+			if (csvList != null && !csvList.isEmpty() && mainReportList != null) {
+				return ok(com.rage.views.html.index.render(Json.toJson(csvList), Json.toJson(mainReportList)));
+			} else if (csvList != null && !csvList.isEmpty() && csvList != null) {
+				return ok(com.rage.views.html.index.render(Json.toJson(csvList), null));
+			} else {
+				return ok(com.rage.views.html.index.render(null, null));
+			}
+		} else {
+			flash("error", "File upload failed");
+			return ok(com.rage.views.html.index.render(null, null));
+		}
+	}
 
+	private List<MainReport> reportGenerate(Csv csvDetails) {
+		Csv latestCsvData = csvServ.getCsvDetailById(csvDetails.getId().toString());
+		List<CsvWebsiteMapping> csvWebsiteMapping = csvWebsiteMappingServ
+				.getCsvWebsiteMapping(latestCsvData.getId().toString());
+		List<String> websiteUrlList = new ArrayList<>();
+		csvWebsiteMapping.forEach(website -> {
+			if (website != null && website.getWebsite() != null && !website.getWebsite().getUrl().isEmpty()) {
+				String url = website.getWebsite().getUrl();
+				websiteUrlList.add(url);
+			}
+		});
+		List<MainReport> mainReportList = RootClass.getData(websiteUrlList);
+		if (!mainReportList.isEmpty()) {
+			mainReportList.forEach(mainReport -> {
+				mainReport.setCsvId(latestCsvData.getId());
+				mainReportServ.addMainReport(mainReport);
+			});
+		}
+		return mainReportList;
+	}
+
+	private List<CsvWebsiteMapping> setCsvWebsiteMappingData(List<Website> websiteUrlLst, Csv csvDetails) {
 		List<CsvWebsiteMapping> csvWebsiteList = new ArrayList<>();
 		websiteUrlLst.forEach(website -> {
 			CsvWebsiteMapping csvWebsiteMapping = new CsvWebsiteMapping();
-			if(website.getId() == null) {
+			if (website.getId() == null) {
 				Website existingWebsite = websiteServ.getWebsiteByUrl(website.getUrl());
 				website.setId(existingWebsite.getId());
 			}
-			if (csvDetails.getId() != null ) {
+			if (csvDetails.getId() != null) {
 				csvWebsiteMapping.setCsvId(csvDetails.getId());
 				csvWebsiteMapping.setWebsiteId(website.getId());
 				csvWebsiteList.add(csvWebsiteMapping);
 			}
 		});
-		csvWebsiteMappingServ.addCsvWebsiteMapping(csvWebsiteList);
-		return ok();
+		return csvWebsiteList;
 	}
 
-	private List<Website> csvFileRead() throws FileNotFoundException, IOException {
-		BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\neethithevan.r\\Desktop\\website.csv"));
+	private Csv setCsvData(Date date, String fileName) {
+		Csv csv = new Csv();
+		csv.setFileName(fileName + "" + date.getTime() + ".csv");
+		csv.setCreatedTime(date);
+		csv.setReportGenerated(false);
+		Csv csvDetails = csvServ.addCsvDetail(csv);
+		return csvDetails;
+	}
+
+	private List<Website> csvFileRead(File file) throws FileNotFoundException, IOException {
+		BufferedReader reader = new BufferedReader(new FileReader(file));
 		String line = null;
 		Scanner scanner = null;
 		int index = 0;
@@ -84,7 +138,6 @@ public class WebsiteController extends Controller {
 				String data = scanner.next();
 				if (index == 0)
 					website.setUrl(data);
-				System.out.println("invalid data::" + data);
 				index++;
 			}
 			index = 0;
@@ -99,24 +152,39 @@ public class WebsiteController extends Controller {
 		String url = request().getQueryString("url");
 		Website websiteUrl = websiteServ.getWebsiteByUrl(url);
 		System.out.println("websiteUrl ::: " + websiteUrl);
-		return ok();
+		return ok(com.rage.views.html.index.render(null, null));
 	}
 
 	public Result uploadCsvFile() throws IOException {
 		System.out.println();
 		Http.MultipartFormData<File> body = request().body().asMultipartFormData();
-	    Http.MultipartFormData.FilePart<File> csvFile = body.getFile("csvFile");
-	    if (csvFile != null) {
-	        String fileName = csvFile.getFilename();
-	        System.out.println("fileName ::: "+fileName);
-	        String contentType = csvFile.getContentType();
-	        File file = csvFile.getFile();
-	        FileUtils.moveFile(file, new File("public/uploadFile", fileName));
-	        return ok("File uploaded");
-	    } else {
-	        flash("error", "Missing file");
-	        return ok("Missing file");
-	    }
+		Http.MultipartFormData.FilePart<File> csvFile = body.getFile("csvFile");
+		if (csvFile != null) {
+			String fileName = csvFile.getFilename();
+			System.out.println("fileName ::: " + fileName);
+			File file = csvFile.getFile();
+			FileUtils.moveFile(file, new File("public/uploadFile", fileName));
+			return ok("File uploaded");
+		} else {
+			flash("error", "Missing file");
+			return ok("Missing file");
+		}
 	}
-	
+
+	public Result getWebsiteResult() {
+		List<Csv> csvList = csvServ.getCsvList();
+		Csv latestCsvData = csvServ.getLatestCsvDetails();
+		List<MainReport> mainReportList = new ArrayList<>();
+		if (latestCsvData != null && latestCsvData.getId() != null) {
+			String csvId = latestCsvData.getId().toString();
+			mainReportList.addAll(mainReportServ.getMainReport(csvId));
+		}
+		if (csvList != null && !csvList.isEmpty() && mainReportList != null) {
+			return ok(com.rage.views.html.index.render(Json.toJson(csvList), Json.toJson(mainReportList)));
+		} else if (csvList != null && !csvList.isEmpty() && csvList != null) {
+			return ok(com.rage.views.html.index.render(Json.toJson(csvList), null));
+		}
+		return ok(com.rage.views.html.index.render(null, null));
+	}
+
 }

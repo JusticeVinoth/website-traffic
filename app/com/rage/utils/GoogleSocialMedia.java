@@ -45,6 +45,7 @@ public class GoogleSocialMedia {
 				Media_Link = sp[sp.length - 1];
 			}
 		}
+		Media_Link=Media_Link.replaceAll("\\s++", "");
 		System.out.println("Social Media link : " + Media_Link);
 		return Media_Link;
 	}

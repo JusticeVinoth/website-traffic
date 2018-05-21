@@ -53,4 +53,24 @@ public class CsvRepositoryImpl implements CsvRepository {
 		return null;
 	}
 
+	@Override
+	public Csv updateCsvReportStatusUsingId(String id) {
+		if (id != null) {
+			Csv csv = getCsvDetailById(id);
+			csv.setReportGenerated(true);
+			csv.update();
+			return csv;
+		}
+		return null;
+	}
+
+	@Override
+	public boolean deleteCsvUsingId(String id) {
+		Csv csv = getCsvDetailById(id);
+		if(id!=null && csv!=null) {
+			return csv.delete();
+		}
+		return false;
+	}
+
 }

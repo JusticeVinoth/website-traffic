@@ -3,11 +3,43 @@ com.fasterxml.jackson.databind.JsonNode)
 
 <html>
 <head>
-
+<meta charset="utf-8">
 <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
 <link rel="stylesheet" href="/assets/css/custom.css">
-<script type='text/javascript' src="/assets/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/assets/js/toastr/toastr.css">
 <script type='text/javascript' src="/assets/js/jquery-3.3.1.js"></script>
+<script type='text/javascript' src="/assets/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/assets/js/toastr/toastr.min.js"></script>
+<script type="text/javascript">
+  toastr.options = {
+    	  "closeButton": true,
+    	  "debug": false,
+    	  "newestOnTop": true,
+    	  "progressBar": true,
+    	  "positionClass": "toast-top-center",
+    	  "preventDuplicates": false,
+    	  "onclick": null,
+    	  "showDuration": "300",
+    	  "hideDuration": "1000",
+    	  "timeOut": "5000",
+    	  "extendedTimeOut": "1000",
+    	  "showEasing": "swing",
+    	  "hideEasing": "linear",
+    	  "showMethod": "fadeIn",
+    	  "hideMethod": "fadeOut"
+    	}
+  
+var homeUrl="@com.rage.controllers.routes.WebsiteTrafficController.home"
+$(function(){
+	@if(flash.get("success") !=null ) {
+		toastr["success"]('@flash.get("success")');
+	}
+	@if(flash.get("error") !=null ) {
+		toastr["error"]('@flash.get("error")');
+		window.location.href=homeUrl;
+	}
+});
+</script>
 </head>
 
 <body>
@@ -33,91 +65,100 @@ com.fasterxml.jackson.databind.JsonNode)
 	<!-- container end -->
 
 	<!-- Upload file -->
-	
 	<div class="site-container report">
 
-		<div class="row">
-			<div class="panel-group">		<div class="panel panel-success">
-					<div class="panel-heading">Upload a file here</div>
-					<div class="panel-body">
-					<form class="dropzone" action="@com.rage.controllers.routes.WebsiteController.uploadCsvFile()" method="post" enctype="multipart/form-data">
-        				@helper.CSRF.formField
-        				<div class="upload-container">
-        					<input class="btn btn-info btn-sm" type="file" name="csvFile">
-        				</div>
-       					<button class="btn btn-primary btn-xs autoshift-uploadButton" type="submit">Upload Document</button>
-    				</form>
-				</div>
-			</div>
-		</div>
-
+		
+		<hr>		
+		
 		<!-- site  traffic report-->
 		<div class="row">
 			<div class="panel-group">
 				<div class="panel panel-success">
 					<div class="panel-heading">Site Traffic Report</div>
 					<div class="panel-body">
-						<div class="panel panel-success">
-							<table class="table table-hover table-responsive">
+						<div class="panel panel-success my-y-scroll2">
+							<table class="table table-hover table-responsive ">
 								<thead>
 									<tr>
 										<th>SITE URL</th>
-<!-- 										<th>HAS FACEBOOK PAGE</th> -->
-<!-- 										<th>HAS TWITTER PAGE</th> -->
-										<th>FACEBOOK<br> FOLLOWERS</th>
-										<th>TWITTER<br> FOLLOWERS</th>
+										<th>FOLLOWERS COUNT</th>
 <!-- 										<th>FACEBOOK URL</th> -->
-										<th>TWITTER URL</th>
 										<th>SEARCH REPORT</th>
 									</tr>
 								</thead>
 
 								@if(reportJson!=null){
 								@for((report,index)<-reportJson.elements.zipWithIndex){
-								<tbody>
+								<tbody> 
+								
 									<tr>
 										@if(report.has("siteUrl")){
-											<td>@report.get("siteUrl").asText()</td> 
+											<td>
+											<span class="glyphicons glyphicons-globe"></span>
+											<a href="@report.get("siteUrl").asText()">@report.get("siteUrl").asText()</a>
+											</td> 
 										}else{
 											<td></td> 
 										} 
 										
-<!-- 										@if(report.has("hasFbPage")){ -->
-<!-- 											<td>@report.get("hasFbPage").asText()</td>  -->
-<!-- 										}else{ -->
-<!-- 											<td></td>  -->
-<!-- 										}  -->
+								 
+										@if(report.has("fbFollowers") & report.has("twitterFollowers")){
 										
-<!-- 										@if(report.has("hasTwitterPage")){ -->
-<!-- 											<td>@report.get("hasTwitterPage").asText()</td>  -->
-<!-- 										}else{ -->
-<!-- 											<td></td>  -->
-<!-- 										}  -->
-										@if(report.has("fbFollowers")){
-											<td align="center">@report.get("fbFollowers").asText()</td> 
+											<td align="center">
+											@if(report.has("fbUrl")){
+											<div class="row">
+											<div class="col-lg-2">
+											<a href="@report.get("fbUrl").asText()"><img src="/assets/images/Fb.png" class="icon-traffic"/></a>
+											</div>
+											<div class="col-lg-2">
+											<span class="btn btn-primary">@report.get("fbFollowers").asText()</span>
+											</div>
+											</div>
+											}
+											
+											</br>
+											
+											@if(report.has("twitterUrl")){
+											<div class="row">
+											<div class="col-lg-2">
+											<a href="@report.get("twitterUrl").asText()"><img src="/assets/images/Twitter.png" class="icon-traffic"/></a>
+											</div>
+											<div class="col-lg-2">
+											<span class="btn btn-primary">@report.get("twitterFollowers").asText()</span>
+											</div>
+											</div>
+											}
+											</td> 
 										}else{
 											<td></td> 
 										} 
-										@if(report.has("twitterFollowers")){
-											<td align="center">@report.get("twitterFollowers").asText()</td> 
-										}else{
-											<td></td> 
-										} 
+											
+											
 <!-- 										@if(report.has("fbUrl")){ -->
 <!-- 											<td>@report.get("fbUrl").asText()</td>  -->
 <!-- 										}else{ -->
 <!-- 											<td></td>  -->
 <!-- 										}  -->
-										@if(report.has("twitterUrl")){
-											<td>@report.get("twitterUrl").asText()</td> 
-										}else{
-											<td></td> 
-										} 
+										
 										@if(report.has("providerReport") && report.get("providerReport")!=null){
 										<td>
 											@for((provReport,index)<-report.get("providerReport").elements.zipWithIndex){
-												@if(provReport!=null && provReport.has("siteName") && !provReport.get("siteName").equals("") && provReport.has("trafficCount")){
-													<p>@provReport.get("siteName").asText() : @provReport.get("trafficCount").asText()</p> 
+												@if(provReport!=null && provReport.has("siteName") && !provReport.get("siteName").asText().equals("") && provReport.has("trafficCount")){
+													
+													<div class="row">
+													
+													<div class="col-lg-4">
+													<p>@provReport.get("siteName").asText()</p>
+													</div>
+													<div class="col-lg-1">
+													<p>:</p>
+													</div>
+													<div class="col-lg-4">
+													<p><span class="btn btn-success">@provReport.get("trafficCount").asText()</span></p> 
+													</div>
+													
+													</div>
+													 
 												}else{
 													<p></p> 
 												}
@@ -136,7 +177,7 @@ com.fasterxml.jackson.databind.JsonNode)
 	</div>
 
 
-		<!-- site traffic files -->
+	<!-- site traffic files -->
 		<div class="row">
 
 			<hr>
@@ -147,12 +188,26 @@ com.fasterxml.jackson.databind.JsonNode)
 				<div class="panel panel-success">
 					<div class="panel-heading">Uploaded Site Traffic Files</div>
 					<div class="panel-body">
-
 						<div class="panel panel-success">
+						<div class="row">
+					
+						<div class="col-lg-6">
+							<br>
+		<form class="dropzone" action="@com.rage.controllers.routes.WebsiteController.addWebsites()" method="post" enctype="multipart/form-data">
+       	@helper.CSRF.formField
+       	<div class="upload-container">
+       	<input class="btn btn-info btn-sm" type="file" name="csvFile">
+       	</div>
+       	<br>
+      <button class="btn btn-primary" type="submit">Upload Document</button>
+   	</form>
+						</div>
+						
+						<div class="col-lg-6">
+						<div class="panel panel-success my-y-scroll1">
 							<table class="table table-hover table-responsive">
 								<thead>
 									<tr>
-										<th>Id</th>
 										<th>CSV Files</th>
 										<th>Action</th>
 									</tr>
@@ -161,22 +216,28 @@ com.fasterxml.jackson.databind.JsonNode)
 								@if(csvJson!=null && csvJson.has(0)){
 								@for((csv,index)<-csvJson.elements().zipWithIndex){
 								<tr>
-									<td>@(index+1)</td>
-									<td><a href="@csv.get("id").asText()" >@csv.get("fileName").asText()</a></td>
+									<td><a href="/website/traffic/@csv.get("id").asText()" >@csv.get("fileName").asText()</a></td>
 									<td><a href=""><img src="/assets/images/delete.png"
 											class="icon-traffic" /></a></td>
 								</tr>
 								} }
 							</table>
+							</div>
+							</div>
+							</div>
+							
 						</div>
 					</div>
 				</div>
 			</div>
 
 
-		</div>
+		</div>	
 
 	</div>
+	
+	
+	
 
 	<div class="footer">
 		<p>&copy; 1996 - 2016 Rage Communications P. Ltd.</p>

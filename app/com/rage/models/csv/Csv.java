@@ -35,7 +35,7 @@ public class Csv extends Model implements Serializable {
 	@Id
 	private Long id;
 
-	@Column
+	@Column(name = "file_name")
 	private String fileName;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -47,6 +47,9 @@ public class Csv extends Model implements Serializable {
 	@OneToMany
 	@JoinColumn(name = "csv_id", referencedColumnName = "id", nullable = false)
 	private List<CsvWebsiteMapping> csvWebsiteMapping;
+
+	@Column(name = "is_report_generated")
+	private boolean isReportGenerated;
 
 	public Long getId() {
 		return id;
@@ -80,10 +83,18 @@ public class Csv extends Model implements Serializable {
 		this.csvWebsiteMapping = csvWebsiteMapping;
 	}
 
+	public boolean isReportGenerated() {
+		return isReportGenerated;
+	}
+
+	public void setReportGenerated(boolean isReportGenerated) {
+		this.isReportGenerated = isReportGenerated;
+	}
+
 	@Override
 	public String toString() {
 		return "Csv [id=" + id + ", fileName=" + fileName + ", createdTime=" + createdTime + ", csvWebsiteMapping="
-				+ csvWebsiteMapping + "]";
+				+ csvWebsiteMapping + ", isReportGenerated=" + isReportGenerated + "]";
 	}
 
 }

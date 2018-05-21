@@ -39,4 +39,14 @@ public class CsvServiceImpl implements CsvService {
 		return csvRepo.getCsvDetailById(csvId);
 	}
 
+	@Override
+	public Csv updateCsvReportStatusUsingId(String id) {
+		return csvRepo.updateCsvReportStatusUsingId(id);
+	}
+
+	@Override
+	public boolean deleteCsvUsingId(String id) {
+		return false;
+	}
+
 }
