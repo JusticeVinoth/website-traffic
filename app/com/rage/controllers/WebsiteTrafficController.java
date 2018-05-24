@@ -5,7 +5,9 @@ package com.rage.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Inject;
 import com.rage.models.csv.Csv;
 import com.rage.models.csv.service.CsvService;
@@ -17,6 +19,7 @@ import com.rage.utils.RootClass;
 
 import play.libs.Json;
 import play.mvc.Controller;
+import play.mvc.Http.RequestBody;
 import play.mvc.Result;
 
 /**
@@ -80,4 +83,42 @@ public class WebsiteTrafficController extends Controller {
 		}
 	}
 
+	
+	public Result contactInfo(){
+		String id = request().getQueryString("id");
+
+		System.out.println("id:"+id);
+			/*Fetch contact info from db here*/
+		
+		ObjectNode res = Json.newObject();
+		res.put("phone", "97760987");
+		res.put("email", "b@gmail.com");
+		return ok(res);
+	}
+	
+	public Result contactInfoUpdate(){
+		Map<String, String[]> data = request().body().asFormUrlEncoded();
+
+		ObjectNode res = Json.newObject();
+		if(data.get("id")==null){
+			res.put("success", false);
+			res.put("msg", "Invalid data");
+			return ok(res);
+		}else{
+			if(data.get("phone")!=null && data.get("phone")[0]!=null ){
+				System.out.println("ph:"+data.get("phone")[0]);
+			}
+			if(data.get("email")!=null&& data.get("email")[0]!=null){
+
+				System.out.println("email:"+data.get("email")[0]);
+			}
+			/*Update contact info here*/
+			
+			res.put("success", true);
+			res.put("msg", "Updated successfully");
+			return ok(res);
+		}
+		
+		
+	}
 }

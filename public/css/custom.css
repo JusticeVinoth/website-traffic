@@ -52,5 +52,11 @@
     padding: 0px 12px;
     font-size: 11px; 	
 }
+.error-msg{
+	color: #cc0000;
+	display: none;
+}
 
-
+.a-pointer{
+	cursor: pointer;
+}
