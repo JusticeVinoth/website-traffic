@@ -8,7 +8,7 @@ function fetchResponse(id) {
 		success : function(response) {
 			console.log(response);
 			if(response=="true"){
-				//window.location.href="/website"
+				window.location.href="/website"
 			}else if(response=="false"){
 				 setTimeout(function(){ fetchResponse(id) }, timelimit);
 			}
