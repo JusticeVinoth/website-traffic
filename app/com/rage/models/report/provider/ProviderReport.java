@@ -72,7 +72,7 @@ public class ProviderReport extends Model implements Serializable {
 	@JsonBackReference
 	private MainReport mainReport;
 
-	public Long getId() {
+	public Long getId() { 
 		return id;
 	}
 
