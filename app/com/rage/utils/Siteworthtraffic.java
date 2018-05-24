@@ -42,7 +42,7 @@ public class Siteworthtraffic {
 		}
 		return DailyUniqueVisitors;
 	}
-	
+	 
 	public static ObjectNode getTrafficCountNew(String siteName) {
 		siteName = siteName.replaceAll("http://", "");
 		siteName = siteName.replaceAll("https://", "");

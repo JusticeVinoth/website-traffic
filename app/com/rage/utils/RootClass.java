@@ -122,7 +122,7 @@ public class RootClass {
 			mainReportList.add(mainReport);
 		}
 		System.out.println("mainReport ::: " + mainReportList);
-		return mainReportList;
+		return mainReportList; 
 	}
 
 	private static void siteRelatedTrafficCount(String siteUrl, String siteName, ObjectNode siteResult,
