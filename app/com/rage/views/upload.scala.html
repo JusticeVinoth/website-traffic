@@ -35,32 +35,22 @@ var addUrl="@com.rage.controllers.routes.WebsiteController.addWebsites"
 </script>
 </head>
 <body>
-	<!-- Header -->
-	<div class="container">
-		<div class="jumbotron">
-			<div class=row>
-				<center>
-					<table class="">
-						<tr>
-							<td><img src="/assets/images/traffic-light.png" class="icon-traffic" /></td>
-							<td><h2 style="padding-left: 12px;">WebSite Traffic Finder</h2></td>
-						</tr>
-					</table>
-				</center>
+	 <div class="row">
+		<div class="site-container">
+			<div class="panel panel-success">
+				<div class="panel-heading"> <a href="@com.rage.controllers.routes.WebsiteTrafficController.home"><span class="my-upload glyphicon glyphicon-circle-arrow-left"></span></a>
+				Uploaded Site Traffic Files </div>
 			</div>
 		</div>
 	</div>
-	<!-- header end -->
-	
 	<!-- Upload file -->
 	<div class="site-container report">
 	<!-- site traffic files -->
 		<div class="row">
-			<hr>
 			<!-- list the uploaded files -->
 			<div class="panel-group">
 				<div class="panel panel-success">
-					<div class="panel-heading ">Uploaded Site Traffic Files   <a href="@com.rage.controllers.routes.WebsiteTrafficController.home"><span class="my-upload glyphicon glyphicon-circle-arrow-left"></span></a></div>
+					
 					<div class="panel-body">
 						<div class="panel panel-success">
 						<div class="row">

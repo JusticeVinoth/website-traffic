@@ -9,7 +9,8 @@
 	padding-right: 125px;
 }
 .icon-traffic{
-	width: 20px;
+	width: 15px;
+	height: 15px;
 }
 .report{
 	padding-right: 118px;
@@ -31,7 +32,7 @@
   	overflow-y: scroll;
 }
 .my-upload{
-	    float: right;
+	   /*  float: right; */
 }
 
 .table>thead>tr>th {
@@ -43,3 +44,13 @@
 .load__container{
 	bottom: 30px;
 }
+
+#report_table_id>thead>tr>th {
+    font-size: 10px; 	
+}
+#report_table_id.dataTable tbody td {
+    padding: 0px 12px;
+    font-size: 11px; 	
+}
+
+
