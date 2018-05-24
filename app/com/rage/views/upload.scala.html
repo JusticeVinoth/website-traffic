@@ -1,0 +1,113 @@
+@(csvJson : com.fasterxml.jackson.databind.JsonNode)
+
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+<link rel="stylesheet" href="/assets/css/custom.css">
+<link rel="stylesheet" type="text/css" href="/assets/js/toastr/toastr.css">
+<script type='text/javascript' src="/assets/js/jquery-3.3.1.js"></script>
+<script type='text/javascript' src="/assets/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/assets/js/toastr/toastr.min.js"></script>
+<script type="text/javascript" src="/assets/js/custom.js"></script>
+<script type="text/javascript" src="/assets/js/upload.js?v=2"></script>
+
+<script type="text/javascript">
+$(function(){
+	@if(!flash.isEmpty()){
+		@if(flash.get("success") !=null ) {
+			toastr["success"]('@flash.get("success")');
+		}
+		@if(flash.get("error") !=null ) {
+			toastr["error"]('@flash.get("error")');
+		}
+		@if(flash.get("info") !=null ) {
+			var respJson=@Html(flash.get("info"));
+			toastr["info"](respJson["msg"]);
+			var csvId=respJson["csvId"];
+			$("#loader").show();
+			setTimeout(function(){ fetchResponse(csvId) }, timelimit);
+		}
+	} 
+});
+var homeUrl="@com.rage.controllers.routes.WebsiteTrafficController.home"
+var addUrl="@com.rage.controllers.routes.WebsiteController.addWebsites"
+</script>
+</head>
+<body>
+	<!-- Header -->
+	<div class="container">
+		<div class="jumbotron">
+			<div class=row>
+				<center>
+					<table class="">
+						<tr>
+							<td><img src="/assets/images/traffic-light.png" class="icon-traffic" /></td>
+							<td><h2 style="padding-left: 12px;">WebSite Traffic Finder</h2></td>
+						</tr>
+					</table>
+				</center>
+			</div>
+		</div>
+	</div>
+	<!-- header end -->
+	
+	<!-- Upload file -->
+	<div class="site-container report">
+	<!-- site traffic files -->
+		<div class="row">
+			<hr>
+			<!-- list the uploaded files -->
+			<div class="panel-group">
+				<div class="panel panel-success">
+					<div class="panel-heading ">Uploaded Site Traffic Files   <a href="@com.rage.controllers.routes.WebsiteTrafficController.home"><span class="my-upload glyphicon glyphicon-circle-arrow-left"></span></a></div>
+					<div class="panel-body">
+						<div class="panel panel-success">
+						<div class="row">
+						<div class="col-lg-6">
+							<br>
+							<div class="col-lg-8">
+								<form class="dropzone" action="@com.rage.controllers.routes.WebsiteController.addWebsites()" method="post" enctype="multipart/form-data">
+						       	<div class="upload-container">
+						       	<input class="btn btn-info btn-sm" type="file" name="csvFile">
+						       	</div>
+						       	<br>
+						      <button class="btn btn-primary" type="submit">Upload Document</button>
+						   	</form>
+						   	</div>
+						   	<div id="loader" class="col-lg-4 load__container" hidden>
+								<img alt="loader" src="/assets/images/processing.gif">
+							</div>
+						</div>
+						<div class="col-lg-6">
+						<div class="panel panel-success my-y-scroll1">
+							<table class="table table-hover table-responsive">
+								<thead>
+									<tr>
+										<th>CSV Files</th>
+										<th>Action</th>
+									</tr>
+								</thead>
+								@if(csvJson!=null && csvJson.has(0)){
+								@for((csv,index)<-csvJson.elements().zipWithIndex){
+								<tr>
+									<td><a href="/website/traffic/@csv.get("id").asText()" >@csv.get("fileName").asText()</a></td>
+									<td><a href="/csv/delete/@csv.get("id").asText()"><img src="/assets/images/delete.png"
+											class="icon-traffic" /></a></td>
+								</tr>
+								} }
+							</table>
+							</div>
+							</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>	
+	</div>
+	<div class="footer">
+		<p>&copy; 2018 - 2019 Rage Communications P. Ltd.</p>
+	</div>
+</body>
+</html>

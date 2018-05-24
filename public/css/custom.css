@@ -30,3 +30,16 @@
 	height:300px;
   	overflow-y: scroll;
 }
+.my-upload{
+	    float: right;
+}
+
+.table>thead>tr>th {
+    font-size: 12px;
+}
+.container {
+    margin-top: 40px;
+}
+.load__container{
+	bottom: 30px;
+}

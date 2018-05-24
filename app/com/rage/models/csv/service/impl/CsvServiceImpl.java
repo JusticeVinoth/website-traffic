@@ -46,7 +46,7 @@ public class CsvServiceImpl implements CsvService {
 
 	@Override
 	public boolean deleteCsvUsingId(String id) {
-		return false;
+		return csvRepo.deleteCsvUsingId(id);
 	}
 
 }

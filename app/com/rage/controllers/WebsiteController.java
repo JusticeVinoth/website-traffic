@@ -12,6 +12,7 @@ import java.util.Scanner;
 
 import org.apache.commons.io.FileUtils;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Inject;
 import com.rage.models.csv.Csv;
 import com.rage.models.csv.service.CsvService;
@@ -49,9 +50,10 @@ public class WebsiteController extends Controller {
 	public Result addWebsites() throws IOException {
 		Http.MultipartFormData<File> body = request().body().asMultipartFormData();
 		Http.MultipartFormData.FilePart<File> csvFile = body.getFile("csvFile");
-		List<Csv> csvList = csvServ.getCsvList();
 		Date date = new Date();
+		List<Csv> csvList = csvServ.getCsvList();
 		String fName = csvFile.getFilename();
+		System.out.println("condition 1 ::: " + (csvFile != null && !fName.isEmpty()));
 		if (csvFile != null && !fName.isEmpty()) {
 			int lastIndex = fName.lastIndexOf(".");
 			String fileName = fName.substring(0, lastIndex);
@@ -62,18 +64,36 @@ public class WebsiteController extends Controller {
 			Csv csvDetails = setCsvData(date, fileName);
 			List<CsvWebsiteMapping> csvWebsiteList = setCsvWebsiteMappingData(websiteUrlLst, csvDetails);
 			csvWebsiteMappingServ.addCsvWebsiteMapping(csvWebsiteList);
-			List<MainReport> mainReportList = reportGenerate(csvDetails);
-			flash("success", "File uploaded successfully");
-			if (csvList != null && !csvList.isEmpty() && mainReportList != null) {
-				return ok(com.rage.views.html.index.render(Json.toJson(csvList), Json.toJson(mainReportList)));
-			} else if (csvList != null && !csvList.isEmpty() && csvList != null) {
-				return ok(com.rage.views.html.index.render(Json.toJson(csvList), null));
+
+			new Thread(() -> {
+				List<MainReport> mainReportList = reportGenerate(csvDetails);
+				if (mainReportList != null) {
+					csvServ.updateCsvReportStatusUsingId(csvDetails.getId().toString());
+				}
+			}).start();
+
+			if (csvDetails != null && csvDetails.getId() != null && csvDetails.isReportGenerated()) {
+				Csv csvData = csvServ.getCsvDetailById(csvDetails.getId().toString());
+				List<MainReport> mainReportList = new ArrayList<>();
+				if (csvData != null && csvData.getId() != null) {
+					String csvId = csvData.getId().toString();
+					mainReportList.addAll(mainReportServ.getMainReport(csvId));
+				}
+				flash("success", "File uploaded successfully");
+				return ok(com.rage.views.html.index.render(Json.toJson(mainReportList)));
+			} else if (csvDetails != null && csvDetails.getId() != null && !(csvDetails.isReportGenerated())) {
+				ObjectNode resp = Json.newObject();
+				resp.put("msg", "Report generating please wait ...");
+				resp.put("csvId", csvDetails.getId().toString());
+				flash("info", resp.toString());
+				return ok(com.rage.views.html.upload.render(Json.toJson(csvList)));
 			} else {
-				return ok(com.rage.views.html.index.render(null, null));
+				flash("error", "File upload failed");
+				return ok(com.rage.views.html.upload.render(null));
 			}
 		} else {
 			flash("error", "File upload failed");
-			return ok(com.rage.views.html.index.render(null, null));
+			return ok(com.rage.views.html.upload.render(null));
 		}
 	}
 
@@ -152,7 +172,7 @@ public class WebsiteController extends Controller {
 		String url = request().getQueryString("url");
 		Website websiteUrl = websiteServ.getWebsiteByUrl(url);
 		System.out.println("websiteUrl ::: " + websiteUrl);
-		return ok(com.rage.views.html.index.render(null, null));
+		return ok(com.rage.views.html.index.render(null));
 	}
 
 	public Result uploadCsvFile() throws IOException {
@@ -172,19 +192,25 @@ public class WebsiteController extends Controller {
 	}
 
 	public Result getWebsiteResult() {
-		List<Csv> csvList = csvServ.getCsvList();
 		Csv latestCsvData = csvServ.getLatestCsvDetails();
 		List<MainReport> mainReportList = new ArrayList<>();
 		if (latestCsvData != null && latestCsvData.getId() != null) {
 			String csvId = latestCsvData.getId().toString();
 			mainReportList.addAll(mainReportServ.getMainReport(csvId));
+			if (mainReportList != null) {
+				return ok(com.rage.views.html.index.render(Json.toJson(mainReportList)));
+			}
 		}
-		if (csvList != null && !csvList.isEmpty() && mainReportList != null) {
-			return ok(com.rage.views.html.index.render(Json.toJson(csvList), Json.toJson(mainReportList)));
-		} else if (csvList != null && !csvList.isEmpty() && csvList != null) {
-			return ok(com.rage.views.html.index.render(Json.toJson(csvList), null));
+		return ok(com.rage.views.html.index.render(null));
+	}
+
+	public Result uploadCsv() {
+		List<Csv> csvList = csvServ.getCsvList();
+		if (csvList != null && !csvList.isEmpty()) {
+			return ok(com.rage.views.html.upload.render(Json.toJson(csvList)));
+		} else {
+			return ok(com.rage.views.html.upload.render(null));
 		}
-		return ok(com.rage.views.html.index.render(null, null));
 	}
 
 }

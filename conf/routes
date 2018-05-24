@@ -6,14 +6,17 @@
 GET 	/										com.rage.controllers.WebsiteController.sayHi
 POST 	/website								com.rage.controllers.WebsiteController.addWebsites
 GET 	/website								com.rage.controllers.WebsiteController.getWebsiteResult
-GET 	/website/url								com.rage.controllers.WebsiteController.getWebsiteByUrl
-POST	/fileupload									com.rage.controllers.WebsiteController.uploadCsvFile
+GET 	/website/url							com.rage.controllers.WebsiteController.getWebsiteByUrl
+POST	/fileupload								com.rage.controllers.WebsiteController.uploadCsvFile
+GET		/upload									com.rage.controllers.WebsiteController.uploadCsv
 
 #Csv
 
 GET		/csv/latest								com.rage.controllers.CsvController.getLatestCsvData
 GET		/csv									com.rage.controllers.CsvController.getCsvDataList
 GET		/csv/:csvId								com.rage.controllers.CsvController.getCsvDetailsById(csvId : String)
+GET		/csv/status/:csvId						com.rage.controllers.CsvController.getReportStatus(csvId : String)
+GET		/csv/delete/:csvId						com.rage.controllers.CsvController.deleteCsvUsingId(csvId : String)
 
 
 #Csv Website Mapping
@@ -24,6 +27,7 @@ GET		/mapping/:csvId							com.rage.controllers.CsvWebsiteMappingController.getc
 GET		/website/traffic						com.rage.controllers.WebsiteTrafficController.findWebsiteTraffic
 GET		/website/traffic/:csvId					com.rage.controllers.WebsiteTrafficController.findWebsiteTrafficWithCsvId(csvId : String)
 GET		/home									com.rage.controllers.WebsiteTrafficController.home
+POST	/home									com.rage.controllers.WebsiteTrafficController.home
 
 
 # Map static resources from the /public folder to the /assets URL path

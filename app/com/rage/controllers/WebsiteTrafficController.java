@@ -57,31 +57,27 @@ public class WebsiteTrafficController extends Controller {
 	}
 
 	public Result findWebsiteTrafficWithCsvId(String csvId) {
-		List<Csv> csvList = csvServ.getCsvList();
 		List<MainReport> mainReportList = new ArrayList<>();
 		mainReportList.addAll(mainReportServ.getMainReport(csvId));
-		if (csvList!=null && !csvList.isEmpty() && mainReportList != null) {
-			return ok(com.rage.views.html.index.render(Json.toJson(csvList), Json.toJson(mainReportList)));
-		} else if (csvList!=null && !csvList.isEmpty() && csvList != null) {
-			return ok(com.rage.views.html.index.render(Json.toJson(csvList), null));
+		if (mainReportList != null) {
+			return ok(com.rage.views.html.index.render(Json.toJson(mainReportList)));
+		}else {
+			return ok(com.rage.views.html.index.render(null));
 		}
-		return ok(com.rage.views.html.index.render(null, null));
 	}
 
 	public Result home() {
-		List<Csv> csvList = csvServ.getCsvList();
 		Csv latestCsvData = csvServ.getLatestCsvDetails();
 		List<MainReport> mainReportList = new ArrayList<>();
 		if (latestCsvData != null && latestCsvData.getId() != null) {
 			String csvId = latestCsvData.getId().toString();
 			mainReportList.addAll(mainReportServ.getMainReport(csvId));
 		}
-		if (csvList!=null && !csvList.isEmpty() && mainReportList != null) {
-			return ok(com.rage.views.html.index.render(Json.toJson(csvList), Json.toJson(mainReportList)));
-		} else if (csvList!=null && !csvList.isEmpty() && csvList != null) {
-			return ok(com.rage.views.html.index.render(Json.toJson(csvList), null));
+		if (mainReportList != null) {
+			return ok(com.rage.views.html.index.render(Json.toJson(mainReportList)));
+		} else {
+			return ok(com.rage.views.html.index.render(null));
 		}
-		return ok(com.rage.views.html.index.render(null, null));
 	}
-	
+
 }

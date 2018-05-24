@@ -8,6 +8,7 @@ import java.util.List;
 import com.rage.models.csv.Csv;
 import com.rage.models.csv.repository.CsvRepository;
 
+import io.ebean.CallableSql;
 import io.ebean.Ebean;
 
 /**
@@ -67,8 +68,17 @@ public class CsvRepositoryImpl implements CsvRepository {
 	@Override
 	public boolean deleteCsvUsingId(String id) {
 		Csv csv = getCsvDetailById(id);
-		if(id!=null && csv!=null) {
-			return csv.delete();
+		if (id != null && csv != null) {
+			String deleteQueryForMapping = "delete from csv_website_mapping where csv_website_mapping.csv_id=" + id;
+			String deleteQueryForCsv = "delete from csv where id=" + id;
+//			String deleteQueryForReport = "delete from main_report where csv_id=" + id;
+			CallableSql callableSqlForMapping = Ebean.createCallableSql(deleteQueryForMapping);
+			CallableSql callableSqlForCsv = Ebean.createCallableSql(deleteQueryForCsv);
+//			CallableSql callableSqlForReport = Ebean.createCallableSql(deleteQueryForReport);
+			Ebean.execute(callableSqlForMapping);
+			Ebean.execute(callableSqlForCsv);
+//			Ebean.execute(callableSqlForReport);
+			return true;
 		}
 		return false;
 	}
