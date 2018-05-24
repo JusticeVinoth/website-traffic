@@ -37,32 +37,8 @@ public class ProviderReport extends Model implements Serializable {
 	@Column(name = "site_name")
 	private String siteName;
 
-	@Column(name = "daily_unique_visitors")
-	private String dailyUniqueVisitors;
-	
-	@Column(name = "daily_revenue")
-	private String dailyRevenue;
-	
-	@Column(name = "daily_unique_pageviews")
-	private String dailyUniquePageviews;
-	
-	@Column(name = "monthly_unique_visitors")
-	private String monthlyUniqueVisitors;
-	
-	@Column(name = "monthly_revenue")
-	private String monthlyRevenue;
-	
-	@Column(name = "monthly_unique_pageviews")
-	private String monthlyUniquePageviews;
-	
-	@Column(name = "yearly_unique_visitors")
-	private String yearlyUniqueVisitors;
-	
-	@Column(name = "yearly_revenue")
-	private String yearlyRevenue;
-	
-	@Column(name = "yearly_unique_pageviews")
-	private String yearlyUniquePageviews;
+	@Column(name = "traffic_Count")
+	private String trafficCount;
 
 	@Column(name = "main_report_id")
 	private Long mainReportId;
@@ -92,80 +68,16 @@ public class ProviderReport extends Model implements Serializable {
 		return siteName;
 	}
 
+	public String getTrafficCount() {
+		return trafficCount;
+	}
+
+	public void setTrafficCount(String trafficCount) {
+		this.trafficCount = trafficCount;
+	}
+
 	public void setSiteName(String siteName) {
 		this.siteName = siteName;
-	}
-
-	public String getDailyUniqueVisitors() {
-		return dailyUniqueVisitors;
-	}
-
-	public void setDailyUniqueVisitors(String dailyUniqueVisitors) {
-		this.dailyUniqueVisitors = dailyUniqueVisitors;
-	}
-
-	public String getDailyRevenue() {
-		return dailyRevenue;
-	}
-
-	public void setDailyRevenue(String dailyRevenue) {
-		this.dailyRevenue = dailyRevenue;
-	}
-
-	public String getDailyUniquePageviews() {
-		return dailyUniquePageviews;
-	}
-
-	public void setDailyUniquePageviews(String dailyUniquePageviews) {
-		this.dailyUniquePageviews = dailyUniquePageviews;
-	}
-
-	public String getMonthlyUniqueVisitors() {
-		return monthlyUniqueVisitors;
-	}
-
-	public void setMonthlyUniqueVisitors(String monthlyUniqueVisitors) {
-		this.monthlyUniqueVisitors = monthlyUniqueVisitors;
-	}
-
-	public String getMonthlyRevenue() {
-		return monthlyRevenue;
-	}
-
-	public void setMonthlyRevenue(String monthlyRevenue) {
-		this.monthlyRevenue = monthlyRevenue;
-	}
-
-	public String getMonthlyUniquePageviews() {
-		return monthlyUniquePageviews;
-	}
-
-	public void setMonthlyUniquePageviews(String monthlyUniquePageviews) {
-		this.monthlyUniquePageviews = monthlyUniquePageviews;
-	}
-
-	public String getYearlyUniqueVisitors() {
-		return yearlyUniqueVisitors;
-	}
-
-	public void setYearlyUniqueVisitors(String yearlyUniqueVisitors) {
-		this.yearlyUniqueVisitors = yearlyUniqueVisitors;
-	}
-
-	public String getYearlyRevenue() {
-		return yearlyRevenue;
-	}
-
-	public void setYearlyRevenue(String yearlyRevenue) {
-		this.yearlyRevenue = yearlyRevenue;
-	}
-
-	public String getYearlyUniquePageviews() {
-		return yearlyUniquePageviews;
-	}
-
-	public void setYearlyUniquePageviews(String yearlyUniquePageviews) {
-		this.yearlyUniquePageviews = yearlyUniquePageviews;
 	}
 
 	public static long getSerialversionuid() {

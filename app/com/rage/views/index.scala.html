@@ -52,7 +52,8 @@
 										<th>TWITTER FOLLOWERS</th>
 										<th>FACEBOOK URL</th>
 										<th>TWITTER URL</th>
-										@if(reportJson!=null){
+										
+											@if(reportJson!=null){
 											@if(reportJson.has(0) && reportJson.get(0).has("providerReport") && reportJson.get(0).get("providerReport")!=null){
 												@for((provReport,index)<-reportJson.get(0).get("providerReport").elements.zipWithIndex){
 													@if(provReport!=null && provReport.has("siteName") && !provReport.get("siteName").asText().equals("")){
@@ -61,6 +62,18 @@
 												}
 											}
 										}
+										
+										<th>DAILY UNIQUE VISITORS</th>
+										<th>DAILY REVENUE (FROM_ADS)</th>
+										<th>DAILY UNIQUE PAGEVIEWS</th>
+										<th>MONTHLY UNIQUE VISITORS</th>
+										<th>MONTHLY REVENUE (FROM ADS)</th>
+										<th>MONTHLY UNIQUE PAGEVIEWS</th>
+										<th>YEARLY UNIQUE VISITORS</th>
+										<th>YEARLY REVENUE (FROM ADS)</th>
+										<th>YEARLY UNIQUE PAGEVIEWS</th>
+										
+									
 									</tr>
 								</thead>
 
@@ -110,6 +123,55 @@
 												}
 											 }
 										}
+										
+										
+										
+										@if(report.has("dailyUniqueVisitors")){
+											<td align="center">@report.get("dailyUniqueVisitors").asText()</td> 
+										}else{
+											<td></td> 
+										} 
+										@if(report.has("dailyRevenue")){
+											<td align="center">@report.get("dailyRevenue").asText()</td> 
+										}else{
+											<td></td> 
+										} 
+										@if(report.has("dailyUniquePageviews")){
+											<td align="center">@report.get("dailyUniquePageviews").asText()</td> 
+										}else{
+											<td></td> 
+										} 
+										@if(report.has("monthlyUniqueVisitors")){
+											<td align="center">@report.get("monthlyUniqueVisitors").asText()</td> 
+										}else{
+											<td></td> 
+										} 
+										@if(report.has("monthlyRevenue")){
+											<td align="center">@report.get("monthlyRevenue").asText()</td> 
+										}else{
+											<td></td> 
+										} 
+										@if(report.has("monthlyUniquePageviews")){
+											<td align="center">@report.get("monthlyUniquePageviews").asText()</td> 
+										}else{
+											<td></td> 
+										} 
+										@if(report.has("yearlyUniqueVisitors")){
+											<td align="center">@report.get("yearlyUniqueVisitors").asText()</td> 
+										}else{
+											<td></td> 
+										} 
+										@if(report.has("yearlyRevenue")){
+											<td align="center">@report.get("yearlyRevenue").asText()</td> 
+										}else{
+											<td></td> 
+										} 
+										@if(report.has("yearlyUniquePageviews")){
+											<td align="center">@report.get("yearlyUniquePageviews").asText()</td> 
+										}else{
+											<td></td> 
+										} 
+										
 									</tr>
 								} 
 							}
