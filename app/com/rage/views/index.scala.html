@@ -29,34 +29,20 @@
 						<div class="panel-heading">Site Traffic Report
 							<span class="my-upload"><a href="@com.rage.controllers.routes.WebsiteController.uploadCsv" data-toggle="tooltip" data-placement="bottom"  title="Upload a new csv file!">
 	       								<span class="glyphicon glyphicon-upload btn btn-primary btn-xs"></span>
-	  		 								</a></span>	</div>								
-					</div>
-		</div>
-    </div>
-</div>    
-	<!-- container end -->
-
-						<div class="site-container report">
-							<div class="row">
-								<div class="panel-group">
-									<div class="panel panel-success">
-										<div class="panel-heading">Site Traffic Report
-											<span class="my-upload"><a href="@com.rage.controllers.routes.WebsiteController.uploadCsv" data-toggle="tooltip" title="Upload a new csv file!">
-		          								<span class="glyphicon glyphicon-upload"></span>
-       		 								</a></span>
-       		 								@if(reportJson!=null){
+	  		 								</a></span>
+	  		 								@if(reportJson!=null){
 	       		 								@if(reportJson.has(0) && reportJson.get(0)!=null && reportJson.get(0).has("csvId") && reportJson.get(0).get("csvId")!=null){
 	       		 								<span class="my-upload"><a href="/report/@reportJson.get(0).get("csvId").asText()" download data-toggle="tooltip" title="Download report file!">
 			          								<span class="glyphicon glyphicon-download-alt"></span>
 	       		 								</a></span>
 	       		 								}
        		 								}
-										</div>
-										
-									</div>
-								</div>
-							</div>
-						</div>
+	  		 							</div>								
+					</div>
+		</div>
+    </div>
+</div>    
+
 							<table id="report_table_id" class="table table-striped table-hover table-responsive report_cls">
 								<thead>
 									<tr>

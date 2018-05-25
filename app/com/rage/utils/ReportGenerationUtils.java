@@ -76,13 +76,15 @@ public class ReportGenerationUtils {
 			int rowCount, HSSFWorkbook wb) {
 		// Create a Row
 		int rowNumStart = 0, rowNumEnd = 1, colNumStart = 0, colNumEnd = 0, cellNum = 0;
-		String headerName = "SITE URL";
+		System.out.println(rowCount);
 		Row headerRow = sheet.createRow(rowCount);
+		rowCount += 1;
+		Row row = sheet.createRow(rowCount);
 		if (mainReportList != null && !mainReportList.isEmpty()) {
 			MainReport mainReport = mainReportList.get(0);
 			if (mainReport.getSiteUrl() != null) {
 				mergeRowHeader(sheet, headerCellStyle, rowNumStart, rowNumEnd, colNumStart, colNumEnd, cellNum,
-						headerName, headerRow);
+						"SITE URL", headerRow);
 			}
 			if (mainReport.getFbFollowers() != null) {
 				colNumStart += 1;
@@ -106,12 +108,11 @@ public class ReportGenerationUtils {
 						"FACEBOOK URL", headerRow);
 			}
 			if (mainReport.getTwitterUrl() != null) {
-				String heaaderName = "TWITTER URL";
 				colNumStart += 1;
 				colNumEnd += 1;
 				cellNum += 1;
 				mergeRowHeader(sheet, headerCellStyle, rowNumStart, rowNumEnd, colNumStart, colNumEnd, cellNum,
-						heaaderName, headerRow);
+						"TWITTER URL", headerRow);
 			}
 			if (mainReport.getProviderReport() != null && !mainReport.getProviderReport().isEmpty()) {
 				List<ProviderReport> providerReport = mainReport.getProviderReport();
@@ -120,10 +121,9 @@ public class ReportGenerationUtils {
 					int reportRowStart = 0, reportRowEnd = 0;
 					colNumStart += 1;
 					cellNum += 1;
-					mergeRowHeader(sheet, headerCellStyle, reportRowStart, reportRowEnd, colNumStart,
-							colNumEnd + websiteSize, cellNum++, "WEBSITES", headerRow);
-					rowCount += 1;
-					Row row = sheet.createRow(rowCount);
+					colNumEnd += websiteSize;
+					mergeRowHeader(sheet, headerCellStyle, reportRowStart, reportRowEnd, colNumStart, colNumEnd,
+							cellNum++, "TRAFFIC", headerRow);
 					cellNum -= 1;
 					for (ProviderReport provReport : providerReport) {
 						if (provReport != null && provReport.getSiteName() != null
@@ -134,6 +134,59 @@ public class ReportGenerationUtils {
 						}
 					}
 				}
+			}
+			if (mainReport.getDailyUniqueVisitors() != null) {
+				colNumStart += 1;
+				colNumEnd += 1;
+				setExcelValue(sheet, row, headerCellStyle, "DAILY UNIQUE VISITORS", cellNum);
+			}
+			if (mainReport.getDailyRevenue() != null) {
+				colNumStart += 1;
+				colNumEnd += 1;
+				cellNum += 1;
+				setExcelValue(sheet, row, headerCellStyle, "DAILY REVENUE", cellNum);
+			}
+			if (mainReport.getDailyUniquePageviews() != null) {
+				colNumStart += 1;
+				colNumEnd += 1;
+				cellNum += 1;
+				setExcelValue(sheet, row, headerCellStyle, "DAILY UNIQUE PAGE VIEWS", cellNum);
+			}
+			if (mainReport.getMonthlyUniqueVisitors() != null) {
+				colNumStart += 1;
+				colNumEnd += 1;
+				cellNum += 1;
+				setExcelValue(sheet, row, headerCellStyle, "MONTHLY UNIQUE VISITORS", cellNum);
+			}
+			if (mainReport.getMonthlyRevenue() != null) {
+				colNumStart += 1;
+				colNumEnd += 1;
+				cellNum += 1;
+				setExcelValue(sheet, row, headerCellStyle, "MONTHLY REVENUE", cellNum);
+			}
+			if (mainReport.getMonthlyUniquePageviews() != null) {
+				colNumStart += 1;
+				colNumEnd += 1;
+				cellNum += 1;
+				setExcelValue(sheet, row, headerCellStyle, "MONTHLY UNIQUE PAGE VIEWS", cellNum);
+			}
+			if (mainReport.getYearlyUniqueVisitors() != null) {
+				colNumStart += 1;
+				colNumEnd += 1;
+				cellNum += 1;
+				setExcelValue(sheet, row, headerCellStyle, "YEARLY UNIQUE VISITORS", cellNum);
+			}
+			if (mainReport.getYearlyRevenue() != null) {
+				colNumStart += 1;
+				colNumEnd += 1;
+				cellNum += 1;
+				setExcelValue(sheet, row, headerCellStyle, "YEARLY REVENUE", cellNum);
+			}
+			if (mainReport.getYearlyUniquePageviews() != null) {
+				colNumStart += 1;
+				colNumEnd += 1;
+				cellNum += 1;
+				setExcelValue(sheet, row, headerCellStyle, "YEARLY UNIQUE PAGE VIEWS", cellNum);
 			}
 			CellStyle style = setFont(wb);
 			rowCount += 1;
@@ -209,6 +262,42 @@ public class ReportGenerationUtils {
 						}
 					}
 				}
+			}
+			if (mainReport.getDailyUniqueVisitors() != null) {
+				cellNum += 1;
+				setExcelValue(sheet, row, style, mainReport.getDailyUniqueVisitors(), cellNum);
+			}
+			if (mainReport.getDailyRevenue() != null) {
+				cellNum += 1;
+				setExcelValue(sheet, row, style, mainReport.getDailyRevenue(), cellNum);
+			}
+			if (mainReport.getDailyUniquePageviews() != null) {
+				cellNum += 1;
+				setExcelValue(sheet, row, style, mainReport.getDailyRevenue(), cellNum);
+			}
+			if (mainReport.getMonthlyUniqueVisitors() != null) {
+				cellNum += 1;
+				setExcelValue(sheet, row, style, mainReport.getMonthlyUniqueVisitors(), cellNum);
+			}
+			if (mainReport.getMonthlyRevenue() != null) {
+				cellNum += 1;
+				setExcelValue(sheet, row, style, mainReport.getMonthlyRevenue(), cellNum);
+			}
+			if (mainReport.getMonthlyUniquePageviews() != null) {
+				cellNum += 1;
+				setExcelValue(sheet, row, style, mainReport.getDailyRevenue(), cellNum);
+			}
+			if (mainReport.getYearlyUniqueVisitors() != null) {
+				cellNum += 1;
+				setExcelValue(sheet, row, style, mainReport.getYearlyUniqueVisitors(), cellNum);
+			}
+			if (mainReport.getYearlyRevenue() != null) {
+				cellNum += 1;
+				setExcelValue(sheet, row, style, mainReport.getYearlyRevenue(), cellNum);
+			}
+			if (mainReport.getYearlyUniquePageviews() != null) {
+				cellNum += 1;
+				setExcelValue(sheet, row, style, mainReport.getYearlyUniquePageviews(), cellNum);
 			}
 		}
 	}
