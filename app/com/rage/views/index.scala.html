@@ -72,6 +72,19 @@
 										<th>YEARLY REVENUE (FROM ADS)</th>
 										<th>YEARLY UNIQUE PAGEVIEWS</th>
 										
+										<th>GLOBAL RANK</th>
+										<th>COUNTRY RANK</th>
+										<th>COUNTRY LABEL</th>
+										<th>WEBSITE LOAD TIME</th>
+										<th>WEBSITE PAGES IZE</th>
+										<th>DOMAIN NAME</th>
+										<th>DOMAIN ORGANIZATION</th>
+										<th>DOMAIN FAX</th>
+										<th>DOMAIN PHONE</th>
+										<th>DOMAIN REGISTRATION DATE</th>
+										<th>DOMAIN LAST UPDATED</th>
+										<th>DOMAIN EXPIRATION DATE</th>
+										
 									
 									</tr>
 								</thead>
@@ -80,7 +93,7 @@
 								@for((report,index)<-reportJson.elements.zipWithIndex){
 									<tr>
 										@if(report.has("siteUrl")){
-											<td><a onclick="editContact(@report.get("id").asLong())" class="a-pointer"><span class="glyphicon glyphicon-pencil"></span></a> &nbsp; @report.get("siteUrl").asText() </td> 
+											<td nowrap="nowrap"><a onclick="editContact(@report.get("id").asLong())" class="a-pointer"><span class="glyphicon glyphicon-pencil"></span></a> &nbsp; @report.get("siteUrl").asText() </td> 
 										}else{
 											<td></td> 
 										} 
@@ -131,7 +144,7 @@
 											<td></td> 
 										} 
 										@if(report.has("dailyRevenue")){
-											<td align="center">@report.get("dailyRevenue").asText()</td> 
+											<td align="center" nowrap="nowrap">@report.get("dailyRevenue").asText()</td> 
 										}else{
 											<td></td> 
 										} 
@@ -146,7 +159,7 @@
 											<td></td> 
 										} 
 										@if(report.has("monthlyRevenue")){
-											<td align="center">@report.get("monthlyRevenue").asText()</td> 
+											<td align="center" nowrap="nowrap">@report.get("monthlyRevenue").asText()</td> 
 										}else{
 											<td></td> 
 										} 
@@ -161,7 +174,7 @@
 											<td></td> 
 										} 
 										@if(report.has("yearlyRevenue")){
-											<td align="center">@report.get("yearlyRevenue").asText()</td> 
+											<td align="center" nowrap="nowrap">@report.get("yearlyRevenue").asText()</td> 
 										}else{
 											<td></td> 
 										} 
@@ -170,6 +183,69 @@
 										}else{
 											<td></td> 
 										} 
+										
+										
+										@if(report.has("globalRank")){
+											<td align="center">@report.get("globalRank").asText()</td> 
+										}else{
+											<td></td> 
+										} 
+										@if(report.has("countryRank")){
+											<td align="center">@report.get("countryRank").asText()</td> 
+										}else{
+											<td></td> 
+										} 
+										@if(report.has("countryLabel")){
+											<td align="center" nowrap="nowrap">@report.get("countryLabel").asText()</td> 
+										}else{
+											<td></td> 
+										} 
+										@if(report.has("websiteLoadTime")){
+											<td align="center">@report.get("websiteLoadTime").asText()</td> 
+										}else{
+											<td></td> 
+										} 
+										@if(report.has("websitePageSize")){
+											<td align="center">@report.get("websitePageSize").asText()</td> 
+										}else{
+											<td></td> 
+										} 
+										@if(report.has("domainName")){
+											<td align="center" nowrap="nowrap">@report.get("domainName").asText()</td> 
+										}else{
+											<td></td> 
+										} 
+										@if(report.has("domainOrganization")){
+											<td align="center">@report.get("domainOrganization").asText()</td> 
+										}else{
+											<td></td> 
+										} 
+										@if(report.has("domainFax")){
+											<td align="center">@report.get("domainFax").asText()</td> 
+										}else{
+											<td></td> 
+										} 
+										@if(report.has("domainPhone")){
+											<td align="center">@report.get("domainPhone").asText()</td> 
+										}else{
+											<td></td> 
+										} 
+										@if(report.has("domainRegistrationDate")){
+											<td align="center" nowrap="nowrap">@report.get("domainRegistrationDate").asText()</td> 
+										}else{
+											<td></td> 
+										} 
+										@if(report.has("domainLastUpdated")){
+											<td align="center" nowrap="nowrap">@report.get("domainLastUpdated").asText()</td> 
+										}else{
+											<td></td> 
+										} 
+										@if(report.has("domainExpirationDate")){
+											<td align="center" nowrap="nowrap">@report.get("domainExpirationDate").asText()</td> 
+										}else{
+											<td></td> 
+										} 
+										
 										
 									</tr>
 								} 
