@@ -37,7 +37,7 @@ public class ProviderReport extends Model implements Serializable {
 	@Column(name = "site_name")
 	private String siteName;
 
-	@Column(name = "traffic_count")
+	@Column(name = "traffic_Count")
 	private String trafficCount;
 
 	@Column(name = "main_report_id")
@@ -68,16 +68,20 @@ public class ProviderReport extends Model implements Serializable {
 		return siteName;
 	}
 
-	public void setSiteName(String siteName) {
-		this.siteName = siteName;
-	}
-
 	public String getTrafficCount() {
 		return trafficCount;
 	}
 
 	public void setTrafficCount(String trafficCount) {
 		this.trafficCount = trafficCount;
+	}
+
+	public void setSiteName(String siteName) {
+		this.siteName = siteName;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 	public Long getMainReportId() {

@@ -3,10 +3,13 @@ package com.rage.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.rage.models.report.main.MainReport;
 import com.rage.models.report.provider.ProviderReport;
 import com.rage.utils.helpers.SocialBean;
 import com.rage.utils.helpers.StaticClass;
+
+import play.libs.Json;
 
 public class RootClass {
 
@@ -36,12 +39,15 @@ public class RootClass {
 			String Statchest_visit_count = "";
 			String FBFollowers = "";
 			String TwitterFollowers = "";
+			
+			
+			ObjectNode Siteworthtraffic_objnode=Json.newObject();
 
 			// get Traffic visited count ----------------------------------
 
 			Siteprice_visit_count = Siteprice.getTrafficCount(siteName);
 			Similarweb_visit_count = Similarweb.getTrafficCount(siteName);
-			Siteworthtraffic_visit_count = Siteworthtraffic.getTrafficCount(siteName);
+			Siteworthtraffic_objnode = Siteworthtraffic.getTrafficCountNew(siteName);
 			Mysitewealth_visit_count = Mysitewealth.getTrafficCount(siteName);
 			Statchest_visit_count = Statchest.getTrafficCount(siteName);
 
@@ -100,6 +106,42 @@ public class RootClass {
 			}
 			mainReport.setTwitterFollowers(TwitterFollowers);
 
+			/*sathish changed */
+			
+			if(Siteworthtraffic_objnode !=null)
+			{
+				if(Siteworthtraffic_objnode.hasNonNull("Daily_Unique_Visitors")){
+					mainReport.setDailyUniqueVisitors(Siteworthtraffic_objnode.get("Daily_Unique_Visitors").asText());
+					Siteworthtraffic_visit_count=Siteworthtraffic_objnode.get("Daily_Unique_Visitors").asText();
+				}
+				if(Siteworthtraffic_objnode.hasNonNull("Daily_Revenue_(From_Ads)")){
+					mainReport.setDailyRevenue(Siteworthtraffic_objnode.get("Daily_Revenue_(From_Ads)").asText());
+				}
+				if(Siteworthtraffic_objnode.hasNonNull("Daily_Unique_Pageviews")){
+					mainReport.setDailyUniquePageviews(Siteworthtraffic_objnode.get("Daily_Unique_Pageviews").asText());
+				}
+				if(Siteworthtraffic_objnode.hasNonNull("Monthly_Unique_Visitors")){
+					mainReport.setMonthlyUniqueVisitors(Siteworthtraffic_objnode.get("Monthly_Unique_Visitors").asText());
+				}
+				if(Siteworthtraffic_objnode.hasNonNull("Monthly_Revenue_(From_Ads)")){
+					mainReport.setMonthlyRevenue(Siteworthtraffic_objnode.get("Monthly_Revenue_(From_Ads)").asText());
+				}
+				if(Siteworthtraffic_objnode.hasNonNull("Monthly_Unique_Pageviews")){
+					mainReport.setMonthlyUniquePageviews(Siteworthtraffic_objnode.get("Monthly_Unique_Pageviews").asText());
+				}
+				if(Siteworthtraffic_objnode.hasNonNull("Yearly_Unique_Visitors")){
+					mainReport.setYearlyUniqueVisitors(Siteworthtraffic_objnode.get("Yearly_Unique_Visitors").asText());
+				}
+				if(Siteworthtraffic_objnode.hasNonNull("Yearly_Revenue_(From_Ads)")){
+					mainReport.setYearlyRevenue(Siteworthtraffic_objnode.get("Yearly_Revenue_(From_Ads)").asText());
+				}
+				if(Siteworthtraffic_objnode.hasNonNull("Yearly_Unique_Pageviews")){
+					mainReport.setYearlyUniquePageviews(Siteworthtraffic_objnode.get("Yearly_Unique_Pageviews").asText());
+				}
+			}
+			
+			
+			
 			List<ProviderReport> providerReportList = new ArrayList<>();
 
 			siteRelatedTrafficCount("http://www.siteprice.org", "siteprice", Siteprice_visit_count, providerReportList);
@@ -113,14 +155,20 @@ public class RootClass {
 					providerReportList);
 
 			mainReport.setProviderReport(providerReportList);
+			
+			
+			
+			
 			mainReportList.add(mainReport);
 		}
 		System.out.println("mainReport ::: " + mainReportList);
-		return mainReportList;
+		return mainReportList; 
 	}
 
 	private static void siteRelatedTrafficCount(String siteUrl, String siteName, String count,
 			List<ProviderReport> providerReportList) {
+		
+		
 		ProviderReport providerReport = new ProviderReport();
 		providerReport.setSearchSiteUrl(siteUrl);
 		providerReport.setSiteName(siteName);

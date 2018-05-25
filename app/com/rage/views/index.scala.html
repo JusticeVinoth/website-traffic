@@ -17,45 +17,25 @@
 <script type="text/javascript">
 	var homeUrl="@com.rage.controllers.routes.WebsiteTrafficController.home"
 	var data=@Html(reportJson.toString());
+	var contactUrl="@com.rage.controllers.routes.WebsiteTrafficController.contactInfo"
 </script>
 </head>
 
 <body>
-
-	<!-- Header -->
-	<div class="container">
-		<div class="jumbotron">
-			<div class=row>
-				<center>
-					<table class="">
-						<tr>
-							<td><img src="/assets/images/traffic-light.png"
-								class="icon-traffic" /></td>
-							<td><h2 style="padding-left: 12px;">WebSite Traffic
-									Finder</h2></td>
-						</tr>
-					</table>
-				</center>
-
-			</div>
-			<center></center>
-		</div>
-	</div>
-	<!-- container end -->
-@*	<div class="site-container report">
-		<hr>		
-		<!-- site  traffic report-->
-		<div class="row">
-			<div class="panel-group">
-				<div class="panel panel-success">
-					<div class="panel-heading">Site Traffic Report
-					<span class="my-upload"><a href="@com.rage.controllers.routes.WebsiteController.uploadCsv" data-toggle="tooltip" title="Upload a new csv file!">
-		          <span class="glyphicon glyphicon-upload"></span>
-       		 </a></span>
+<div class="container-fluid">
+    <div class="row">			
+				<div class="panel-group">
+					<div class="panel panel-success">
+						<div class="panel-heading">Site Traffic Report
+							<span class="my-upload"><a href="@com.rage.controllers.routes.WebsiteController.uploadCsv" data-toggle="tooltip" data-placement="bottom"  title="Upload a new csv file!">
+	       								<span class="glyphicon glyphicon-upload btn btn-primary btn-xs"></span>
+	  		 								</a></span>	</div>								
 					</div>
-					<div class="panel-body">
-						<div class="panel panel-success">*@
-						
+		</div>
+    </div>
+</div>    
+	<!-- container end -->
+
 						<div class="site-container report">
 							<div class="row">
 								<div class="panel-group">
@@ -77,7 +57,7 @@
 								</div>
 							</div>
 						</div>
-							<table id="report_table_id" class="table table-hover table-responsive report_cls">
+							<table id="report_table_id" class="table table-striped table-hover table-responsive report_cls">
 								<thead>
 									<tr>
 										<th>SITE URL</th>
@@ -85,7 +65,8 @@
 										<th>TWITTER FOLLOWERS</th>
 										<th>FACEBOOK URL</th>
 										<th>TWITTER URL</th>
-										@if(reportJson!=null){
+										
+											@if(reportJson!=null){
 											@if(reportJson.has(0) && reportJson.get(0).has("providerReport") && reportJson.get(0).get("providerReport")!=null){
 												@for((provReport,index)<-reportJson.get(0).get("providerReport").elements.zipWithIndex){
 													@if(provReport!=null && provReport.has("siteName") && !provReport.get("siteName").asText().equals("")){
@@ -94,6 +75,18 @@
 												}
 											}
 										}
+										
+										<th>DAILY UNIQUE VISITORS</th>
+										<th>DAILY REVENUE (FROM_ADS)</th>
+										<th>DAILY UNIQUE PAGEVIEWS</th>
+										<th>MONTHLY UNIQUE VISITORS</th>
+										<th>MONTHLY REVENUE (FROM ADS)</th>
+										<th>MONTHLY UNIQUE PAGEVIEWS</th>
+										<th>YEARLY UNIQUE VISITORS</th>
+										<th>YEARLY REVENUE (FROM ADS)</th>
+										<th>YEARLY UNIQUE PAGEVIEWS</th>
+										
+									
 									</tr>
 								</thead>
 
@@ -101,7 +94,7 @@
 								@for((report,index)<-reportJson.elements.zipWithIndex){
 									<tr>
 										@if(report.has("siteUrl")){
-											<td>@report.get("siteUrl").asText()</td> 
+											<td><a onclick="editContact(@report.get("id").asLong())" class="a-pointer"><span class="glyphicon glyphicon-pencil"></span></a> &nbsp; @report.get("siteUrl").asText() </td> 
 										}else{
 											<td></td> 
 										} 
@@ -132,7 +125,7 @@
 												<td>
 													<div class="row">
 														<div class="col-lg-12">
-															<p><span class="btn btn-success btn-xs">@provReport.get("trafficCount").asText()</span></p> 
+															<span>@provReport.get("trafficCount").asText()</span>
 														</div>
 													</div>
 												</td> 
@@ -143,6 +136,55 @@
 												}
 											 }
 										}
+										
+										
+										
+										@if(report.has("dailyUniqueVisitors")){
+											<td align="center">@report.get("dailyUniqueVisitors").asText()</td> 
+										}else{
+											<td></td> 
+										} 
+										@if(report.has("dailyRevenue")){
+											<td align="center">@report.get("dailyRevenue").asText()</td> 
+										}else{
+											<td></td> 
+										} 
+										@if(report.has("dailyUniquePageviews")){
+											<td align="center">@report.get("dailyUniquePageviews").asText()</td> 
+										}else{
+											<td></td> 
+										} 
+										@if(report.has("monthlyUniqueVisitors")){
+											<td align="center">@report.get("monthlyUniqueVisitors").asText()</td> 
+										}else{
+											<td></td> 
+										} 
+										@if(report.has("monthlyRevenue")){
+											<td align="center">@report.get("monthlyRevenue").asText()</td> 
+										}else{
+											<td></td> 
+										} 
+										@if(report.has("monthlyUniquePageviews")){
+											<td align="center">@report.get("monthlyUniquePageviews").asText()</td> 
+										}else{
+											<td></td> 
+										} 
+										@if(report.has("yearlyUniqueVisitors")){
+											<td align="center">@report.get("yearlyUniqueVisitors").asText()</td> 
+										}else{
+											<td></td> 
+										} 
+										@if(report.has("yearlyRevenue")){
+											<td align="center">@report.get("yearlyRevenue").asText()</td> 
+										}else{
+											<td></td> 
+										} 
+										@if(report.has("yearlyUniquePageviews")){
+											<td align="center">@report.get("yearlyUniquePageviews").asText()</td> 
+										}else{
+											<td></td> 
+										} 
+										
 									</tr>
 								} 
 							}
@@ -153,6 +195,38 @@
 		</div>
 	</div>
 	</div>*@
+	
+	
+	<div id="contactModal" class="modal fade" role="dialog">
+	  <div class="modal-dialog">	
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+	        <h4 class="modal-title">Communication Details</h4>
+	      </div>
+	      <div class="modal-body">
+	      	<form id="form" action="#" >
+	        	<div class="form-group row">
+  					<label class="col-lg-4 control-label "><div>Phone No: </div></label>								
+		 			<div class="col-lg-8 "><input type="text" class="form-control" name="phone" id="phone" value=""></div>
+				</div>
+				<div class="form-group row">
+  					<label class="col-lg-4 control-label "><div>Email ID: </div></label>								
+		 			<div class="col-lg-8 "><input type="text" class="form-control" name="email" id="email" value=""></div>
+				</div>
+				<div class="form-group row">
+					<label class="col-lg-12 control-label "><div><span class="error-msg">Please fill atleast one field </span></div></label>
+				</div>
+			</form>
+	      </div>
+	      <div class="modal-footer">
+	      	<a href="#" class="btn btn-primary" onclick="saveContact()">Save</a>
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	      </div>
+	    </div>
+	
+	  </div>
+  </div>
 	
 	<div class="footer">
 		<p>&copy; 2018 - 2019 Rage Communications P. Ltd.</p>
