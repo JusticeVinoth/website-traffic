@@ -18,6 +18,7 @@ libraryDependencies ++= Seq(
  "org.assertj" % "assertj-core" % "3.6.2" % Test,
  "org.awaitility" % "awaitility" % "2.0.0" % Test,
  "com.google.inject" % "guice" % "4.2.0",
+ "org.apache.poi" % "poi" % "3.14",
  
  "org.apache.directory.studio" % "org.apache.commons.io" % "2.4",
  

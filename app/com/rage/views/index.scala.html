@@ -16,6 +16,7 @@
 
 <script type="text/javascript">
 	var homeUrl="@com.rage.controllers.routes.WebsiteTrafficController.home"
+	var data=@Html(reportJson.toString());
 </script>
 </head>
 
@@ -63,6 +64,13 @@
 											<span class="my-upload"><a href="@com.rage.controllers.routes.WebsiteController.uploadCsv" data-toggle="tooltip" title="Upload a new csv file!">
 		          								<span class="glyphicon glyphicon-upload"></span>
        		 								</a></span>
+       		 								@if(reportJson!=null){
+	       		 								@if(reportJson.has(0) && reportJson.get(0)!=null && reportJson.get(0).has("csvId") && reportJson.get(0).get("csvId")!=null){
+	       		 								<span class="my-upload"><a href="/report/@reportJson.get(0).get("csvId").asText()" download data-toggle="tooltip" title="Download report file!">
+			          								<span class="glyphicon glyphicon-download-alt"></span>
+	       		 								</a></span>
+	       		 								}
+       		 								}
 										</div>
 										
 									</div>
