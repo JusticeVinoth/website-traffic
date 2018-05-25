@@ -158,6 +158,18 @@ public class WebsiteController extends Controller {
 				String data = scanner.next();
 				if (index == 0)
 					website.setUrl(data);
+				else if (index == 1)
+					website.setAlexaRanking(data);
+				else if (index == 2)
+					website.setCountryIp(data);
+				else if (index == 3)
+					website.setCountryCodePage(data);
+				else if (index == 4)
+					website.setIp(data);
+				else if (index == 5)
+					website.setWebServer(data);
+				else if (index == 6)
+					website.setEmail(data);
 				index++;
 			}
 			index = 0;

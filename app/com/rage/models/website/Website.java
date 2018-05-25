@@ -17,23 +17,40 @@ import com.rage.models.website.csv.mapping.CsvWebsiteMapping;
 
 import io.ebean.Model;
 
-
 /**
  * @author neethithevan.r
  *
  */
 @Entity
 @Table(name = "website")
-public class Website extends Model implements Serializable{
+public class Website extends Model implements Serializable {
 
 	private static final long serialVersionUID = 8259303456445993351L;
-	
+
 	@Id
 	private Long id;
-	
+
 	@Column(name = "url")
 	private String url;
-	
+
+	@Column(name = "alexa_ranking")
+	private String alexaRanking;
+
+	@Column(name = "country_ip")
+	private String countryIp;
+
+	@Column(name = "country_code_page")
+	private String countryCodePage;
+
+	@Column(name = "ip")
+	private String ip;
+
+	@Column(name = "web_server")
+	private String webServer;
+
+	@Column(name = "email")
+	private String email;
+
 	@OneToMany
 	@JoinColumn(name = "website_id", referencedColumnName = "id", nullable = false)
 	private List<CsvWebsiteMapping> csvWebsiteMapping;
@@ -54,6 +71,54 @@ public class Website extends Model implements Serializable{
 		this.url = url;
 	}
 
+	public String getAlexaRanking() {
+		return alexaRanking;
+	}
+
+	public void setAlexaRanking(String alexaRanking) {
+		this.alexaRanking = alexaRanking;
+	}
+
+	public String getCountryIp() {
+		return countryIp;
+	}
+
+	public void setCountryIp(String countryIp) {
+		this.countryIp = countryIp;
+	}
+
+	public String getCountryCodePage() {
+		return countryCodePage;
+	}
+
+	public void setCountryCodePage(String countryCodePage) {
+		this.countryCodePage = countryCodePage;
+	}
+
+	public String getIp() {
+		return ip;
+	}
+
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
+
+	public String getWebServer() {
+		return webServer;
+	}
+
+	public void setWebServer(String webServer) {
+		this.webServer = webServer;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	public List<CsvWebsiteMapping> getCsvWebsiteMapping() {
 		return csvWebsiteMapping;
 	}
@@ -64,7 +129,9 @@ public class Website extends Model implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Website [id=" + id + ", url=" + url + ", csvWebsiteMapping=" + csvWebsiteMapping + "]";
+		return "Website [id=" + id + ", url=" + url + ", alexaRanking=" + alexaRanking + ", countryIp=" + countryIp
+				+ ", countryCodePage=" + countryCodePage + ", ip=" + ip + ", webServer=" + webServer + ", email="
+				+ email + ", csvWebsiteMapping=" + csvWebsiteMapping + "]";
 	}
 
 }

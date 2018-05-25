@@ -71,13 +71,17 @@ public class CsvRepositoryImpl implements CsvRepository {
 		if (id != null && csv != null) {
 			String deleteQueryForMapping = "delete from csv_website_mapping where csv_website_mapping.csv_id=" + id;
 			String deleteQueryForCsv = "delete from csv where id=" + id;
-//			String deleteQueryForReport = "delete from main_report where csv_id=" + id;
+			String deleteQueryForReport = "delete from provider_report  where main_report_id in (select id from main_report where csv_id="
+					+ id + ")";
+			String deleteQueryForMainReport = "delete from main_report where csv_id=" + id;
 			CallableSql callableSqlForMapping = Ebean.createCallableSql(deleteQueryForMapping);
 			CallableSql callableSqlForCsv = Ebean.createCallableSql(deleteQueryForCsv);
-//			CallableSql callableSqlForReport = Ebean.createCallableSql(deleteQueryForReport);
+			CallableSql callableSqlForReport = Ebean.createCallableSql(deleteQueryForReport);
+			CallableSql callableSqlForMainReport = Ebean.createCallableSql(deleteQueryForMainReport);
 			Ebean.execute(callableSqlForMapping);
 			Ebean.execute(callableSqlForCsv);
-//			Ebean.execute(callableSqlForReport);
+			Ebean.execute(callableSqlForReport);
+			Ebean.execute(callableSqlForMainReport);
 			return true;
 		}
 		return false;
