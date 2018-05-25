@@ -13,13 +13,14 @@ import com.rage.models.csv.Csv;
 import com.rage.models.csv.service.CsvService;
 import com.rage.models.report.main.MainReport;
 import com.rage.models.report.service.MainReportService;
+import com.rage.models.website.Website;
 import com.rage.models.website.csv.mapping.CsvWebsiteMapping;
 import com.rage.models.website.csv.mapping.service.CsvWebsiteMappingService;
+import com.rage.models.website.service.WebsiteService;
 import com.rage.utils.RootClass;
 
 import play.libs.Json;
 import play.mvc.Controller;
-import play.mvc.Http.RequestBody;
 import play.mvc.Result;
 
 /**
@@ -36,6 +37,9 @@ public class WebsiteTrafficController extends Controller {
 
 	@Inject
 	public CsvWebsiteMappingService csvWebsiteMappingServ;
+
+	@Inject
+	public WebsiteService websiteServ;
 
 	public Result findWebsiteTraffic() {
 		Csv latestCsvData = csvServ.getLatestCsvDetails();
@@ -60,11 +64,10 @@ public class WebsiteTrafficController extends Controller {
 	}
 
 	public Result findWebsiteTrafficWithCsvId(String csvId) {
-		List<MainReport> mainReportList = new ArrayList<>();
-		mainReportList.addAll(mainReportServ.getMainReport(csvId));
+		List<MainReport> mainReportList = mainReportServ.getMainReport(csvId);
 		if (mainReportList != null) {
 			return ok(com.rage.views.html.index.render(Json.toJson(mainReportList)));
-		}else {
+		} else {
 			return ok(com.rage.views.html.index.render(null));
 		}
 	}
@@ -75,50 +78,58 @@ public class WebsiteTrafficController extends Controller {
 		if (latestCsvData != null && latestCsvData.getId() != null) {
 			String csvId = latestCsvData.getId().toString();
 			mainReportList.addAll(mainReportServ.getMainReport(csvId));
+			if (mainReportList != null)
+				return ok(com.rage.views.html.index.render(Json.toJson(mainReportList)));
 		}
-		if (mainReportList != null) {
-			return ok(com.rage.views.html.index.render(Json.toJson(mainReportList)));
-		} else {
-			return ok(com.rage.views.html.index.render(null));
-		}
+		return ok(com.rage.views.html.index.render(null));
 	}
 
-	
-	public Result contactInfo(){
+	public Result contactInfo() {
 		String id = request().getQueryString("id");
-
-		System.out.println("id:"+id);
-			/*Fetch contact info from db here*/
-		
 		ObjectNode res = Json.newObject();
-		res.put("phone", "97760987");
-		res.put("email", "b@gmail.com");
+		if (id != null) {
+			Website website = websiteServ.getWebsiteById(id);
+			if (website != null) {
+				res.put("phone", website.getPhone());
+				res.put("email", website.getEmail());
+				res.put("success", true);
+				return ok(res);
+			} else {
+				res.put("success", false);
+				res.put("response", "Resource not found");
+				return ok(res);
+			}
+		}
+		res.put("success", false);
+		res.put("response", "Resource not found");
 		return ok(res);
 	}
-	
-	public Result contactInfoUpdate(){
+
+	public Result contactInfoUpdate() {
 		Map<String, String[]> data = request().body().asFormUrlEncoded();
+		
+		
+		
 
 		ObjectNode res = Json.newObject();
-		if(data.get("id")==null){
+		if (data.get("id") == null) {
 			res.put("success", false);
 			res.put("msg", "Invalid data");
 			return ok(res);
-		}else{
-			if(data.get("phone")!=null && data.get("phone")[0]!=null ){
-				System.out.println("ph:"+data.get("phone")[0]);
+		} else {
+			if (data.get("phone") != null && data.get("phone")[0] != null) {
+				System.out.println("ph:" + data.get("phone")[0]);
 			}
-			if(data.get("email")!=null&& data.get("email")[0]!=null){
+			if (data.get("email") != null && data.get("email")[0] != null) {
 
-				System.out.println("email:"+data.get("email")[0]);
+				System.out.println("email:" + data.get("email")[0]);
 			}
-			/*Update contact info here*/
-			
+			/* Update contact info here */
+
 			res.put("success", true);
 			res.put("msg", "Updated successfully");
 			return ok(res);
 		}
-		
-		
+
 	}
 }
