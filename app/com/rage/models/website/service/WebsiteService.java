@@ -21,4 +21,8 @@ public interface WebsiteService {
 	public Website getWebsiteByUrl(String url);
 	
 	public List<Website> getWebsiteList();
+	
+	public Website getWebsiteById(String id);
+	
+	public boolean updateWebsite(String id,Website latestWebsite);
 }

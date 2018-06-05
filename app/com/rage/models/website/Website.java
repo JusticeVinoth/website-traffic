@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.rage.models.report.provider.ProviderReport;
 import com.rage.models.website.csv.mapping.CsvWebsiteMapping;
 
 import io.ebean.Model;
@@ -47,6 +48,9 @@ public class Website extends Model implements Serializable {
 
 	@Column(name = "web_server")
 	private String webServer;
+
+	@Column(name = "phone")
+	private String phone;
 
 	@Column(name = "email")
 	private String email;
@@ -111,6 +115,14 @@ public class Website extends Model implements Serializable {
 		this.webServer = webServer;
 	}
 
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
 	public String getEmail() {
 		return email;
 	}
@@ -130,8 +142,8 @@ public class Website extends Model implements Serializable {
 	@Override
 	public String toString() {
 		return "Website [id=" + id + ", url=" + url + ", alexaRanking=" + alexaRanking + ", countryIp=" + countryIp
-				+ ", countryCodePage=" + countryCodePage + ", ip=" + ip + ", webServer=" + webServer + ", email="
-				+ email + ", csvWebsiteMapping=" + csvWebsiteMapping + "]";
+				+ ", countryCodePage=" + countryCodePage + ", ip=" + ip + ", webServer=" + webServer + ", phone="
+				+ phone + ", email=" + email + ", csvWebsiteMapping=" + csvWebsiteMapping + "]";
 	}
 
 }

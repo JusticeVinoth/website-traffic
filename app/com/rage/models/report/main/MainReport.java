@@ -11,9 +11,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.rage.models.report.provider.ProviderReport;
+import com.rage.models.website.Website;
 
 import io.ebean.Model;
 
@@ -33,6 +35,9 @@ public class MainReport extends Model implements Serializable {
 
 	@Column(name = "csv_id")
 	private Long csvId;
+
+	@Column(name = "site_id")
+	private String siteId;
 
 	@Column(name = "site_url")
 	private String siteUrl;
@@ -54,157 +59,151 @@ public class MainReport extends Model implements Serializable {
 
 	@Column(name = "twitter_urlL")
 	private String twitterUrl;
-	
+
 	@Column(name = "daily_unique_visitors")
 	private String dailyUniqueVisitors;
-	
+
 	@Column(name = "daily_revenue")
 	private String dailyRevenue;
-	
+
 	@Column(name = "daily_unique_pageviews")
 	private String dailyUniquePageviews;
-	
+
 	@Column(name = "monthly_unique_visitors")
 	private String monthlyUniqueVisitors;
-	
+
 	@Column(name = "monthly_revenue")
 	private String monthlyRevenue;
-	
+
 	@Column(name = "monthly_unique_pageviews")
 	private String monthlyUniquePageviews;
-	
+
 	@Column(name = "yearly_unique_visitors")
 	private String yearlyUniqueVisitors;
-	
+
 	@Column(name = "yearly_revenue")
 	private String yearlyRevenue;
-	
+
 	@Column(name = "yearly_unique_pageviews")
 	private String yearlyUniquePageviews;
-	
+
 	@Column(name = "global_rank")
 	private String globalRank;
-	
-	
+
 	@Column(name = "country_rank")
 	private String countryRank;
-	
+
 	@Column(name = "country_label")
 	private String countryLabel;
-	
+
 	@Column(name = "website_load_time")
 	private String websiteLoadTime;
-	
-	
+
 	@Column(name = "website_page_size ")
-	private String websitePageSize ;
-	
+	private String websitePageSize;
+
 	@Column(name = "domain_name")
 	private String domainName;
 
 	@Column(name = "domain_organization")
 	private String domainOrganization;
-	
+
 	@Column(name = "domain_fax")
 	private String domainFax;
-	
+
 	@Column(name = "domain_phone")
 	private String domainPhone;
-	
+
 	@Column(name = "domain_owner_street")
 	private String domainOwnerStreet;
-	
+
 	@Column(name = "domain_owner_city")
 	private String domainOwnerCity;
-	
+
 	@Column(name = "domain_owner_state")
 	private String domainOwnerState;
-	
+
 	@Column(name = "domain_owner_postal_code")
 	private String domainOwnerPostalCode;
-	
+
 	@Column(name = "domain_owner_country")
 	private String domainOwnerCountry;
-	
+
 	@Column(name = "domain_owner_email")
 	private String domainOwnerEmail;
-	
-	
+
 	@Column(name = "domain_registration_date")
 	private String domainRegistrationDate;
-	
+
 	@Column(name = "domain_last_updated")
 	private String domainLastUpdated;
-	
+
 	@Column(name = "domain_expiration_date")
 	private String domainExpirationDate;
-	
+
 	@Column(name = "domain_registrar")
 	private String domainRegistrar;
-	
-	
+
 	@Column(name = "domain_sever_ip_address")
 	private String domainSeverIpAddress;
-	
+
 	@Column(name = "domain_server_location")
 	private String domainServerLocation;
-	
+
 	@Column(name = "domain_hosting_provider")
 	private String domainHostingProvider;
-	
+
 	@Column(name = "domain_server_http_code")
 	private String domainServerHttpCode;
-	
-	
+
 	@Column(name = "web_server_name")
 	private String webServerName;
-	
+
 	@Column(name = "web_server_ip_address")
 	private String webServerIPAddress;
-	
+
 	@Column(name = "web_server_country")
 	private String webServerCountry;
-	
-	
+
 	@Column(name = "google_pagerank")
 	private String googlePagerank;
-	
+
 	@Column(name = "page_speed_score")
 	private String pageSpeedScore;
-	
+
 	@Column(name = "mobile_speed_score")
 	private String mobileSpeedScore;
-	
+
 	@Column(name = "bounce_rate")
 	private String bounceRate;
-	
+
 	@Column(name = "moz_rank")
 	private String mozRank;
-	
+
 	@Column(name = "domain_authority")
 	private String domainAuthority;
-	
+
 	@Column(name = "page_authority")
 	private String pageAuthority;
-	
-	
+
 	@Column(name = "google_safe_browsing")
 	private String googleSafeBrowsing;
-	
+
 	@Column(name = "spamhaus_blocklist")
 	private String spamhausBlocklist;
-	
-	
+
 	@Column(name = "total_backinks")
 	private String totalBackinks;
-	
+
 	@Column(name = "robots_txt")
 	private String robotsTxt;
-	
+
 	@Column(name = "sitemap_xml")
 	private String sitemapXml;
-	
-	
+
+	@OneToOne
+	@JoinColumn(name = "site_id", referencedColumnName = "id", insertable = false, updatable = false)
+	private Website website;
 
 	@OneToMany
 	@JoinColumn(name = "main_report_id", referencedColumnName = "id", nullable = false)
@@ -220,6 +219,14 @@ public class MainReport extends Model implements Serializable {
 
 	public Long getCsvId() {
 		return csvId;
+	}
+
+	public String getSiteId() {
+		return siteId;
+	}
+
+	public void setSiteId(String siteId) {
+		this.siteId = siteId;
 	}
 
 	public void setCsvId(Long csvId) {
@@ -281,8 +288,6 @@ public class MainReport extends Model implements Serializable {
 	public void setTwitterUrl(String twitterUrl) {
 		this.twitterUrl = twitterUrl;
 	}
-
-	
 
 	public String getDailyUniqueVisitors() {
 		return dailyUniqueVisitors;
@@ -356,9 +361,6 @@ public class MainReport extends Model implements Serializable {
 		this.yearlyUniquePageviews = yearlyUniquePageviews;
 	}
 
-	
-	
-	
 	public String getGlobalRank() {
 		return globalRank;
 	}
@@ -455,7 +457,6 @@ public class MainReport extends Model implements Serializable {
 		this.domainExpirationDate = domainExpirationDate;
 	}
 
-	
 	public String getDomainRegistrar() {
 		return domainRegistrar;
 	}
@@ -463,7 +464,7 @@ public class MainReport extends Model implements Serializable {
 	public void setDomainRegistrar(String domainRegistrar) {
 		this.domainRegistrar = domainRegistrar;
 	}
-	
+
 	public String getDomainOwnerStreet() {
 		return domainOwnerStreet;
 	}
@@ -512,7 +513,6 @@ public class MainReport extends Model implements Serializable {
 		this.domainOwnerEmail = domainOwnerEmail;
 	}
 
-	
 	public String getWebServerName() {
 		return webServerName;
 	}
@@ -620,12 +620,11 @@ public class MainReport extends Model implements Serializable {
 	public String getPageAuthority() {
 		return pageAuthority;
 	}
-	
+
 	public void setPageAuthority(String pageAuthority) {
 		this.pageAuthority = pageAuthority;
 	}
 
-	
 	public String getGoogleSafeBrowsing() {
 		return googleSafeBrowsing;
 	}
@@ -642,7 +641,6 @@ public class MainReport extends Model implements Serializable {
 		this.spamhausBlocklist = spamhausBlocklist;
 	}
 
-	
 	public String getTotalBackinks() {
 		return totalBackinks;
 	}
@@ -667,8 +665,12 @@ public class MainReport extends Model implements Serializable {
 		this.sitemapXml = sitemapXml;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	public Website getWebsite() {
+		return website;
+	}
+
+	public void setWebsite(Website website) {
+		this.website = website;
 	}
 
 	public List<ProviderReport> getProviderReport() {
@@ -679,5 +681,4 @@ public class MainReport extends Model implements Serializable {
 		this.providerReport = providerReport;
 	}
 
-	
 }

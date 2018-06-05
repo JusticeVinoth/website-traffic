@@ -46,21 +46,23 @@ public class WebsiteTrafficController extends Controller {
 		System.out.println("latestCsvData :: " + latestCsvData);
 		List<CsvWebsiteMapping> csvWebsiteMapping = csvWebsiteMappingServ
 				.getCsvWebsiteMapping(latestCsvData.getId().toString());
-		List<String> websiteUrlList = new ArrayList<>();
+		List<Website> websiteUrlList = new ArrayList<>();
 		csvWebsiteMapping.forEach(website -> {
 			if (website != null && website.getWebsite() != null && !website.getWebsite().getUrl().isEmpty()) {
-				String url = website.getWebsite().getUrl();
-				websiteUrlList.add(url);
+				websiteUrlList.add(website.getWebsite());
 			}
 		});
-		List<MainReport> mainReportList = RootClass.getData(websiteUrlList);
-		if (!mainReportList.isEmpty()) {
-			mainReportList.forEach(mainReport -> {
-				mainReport.setCsvId(latestCsvData.getId());
-				mainReportServ.addMainReport(mainReport);
-			});
+		if (websiteUrlList != null && !websiteUrlList.isEmpty()) {
+			List<MainReport> mainReportList = RootClass.getData(websiteUrlList);
+			if (!mainReportList.isEmpty()) {
+				mainReportList.forEach(mainReport -> {
+					mainReport.setCsvId(latestCsvData.getId());
+					mainReportServ.addMainReport(mainReport);
+				});
+			}
+			return ok(Json.toJson(mainReportList));
 		}
-		return ok(Json.toJson(mainReportList));
+		return notFound();
 	}
 
 	public Result findWebsiteTrafficWithCsvId(String csvId) {
@@ -77,15 +79,26 @@ public class WebsiteTrafficController extends Controller {
 		List<MainReport> mainReportList = new ArrayList<>();
 		if (latestCsvData != null && latestCsvData.getId() != null) {
 			String csvId = latestCsvData.getId().toString();
-			mainReportList.addAll(mainReportServ.getMainReport(csvId));
-			if (mainReportList != null)
-				return ok(com.rage.views.html.index.render(Json.toJson(mainReportList)));
+			List<MainReport> mainReportLst = mainReportServ.getMainReport(csvId);
+			if (mainReportLst != null) {
+				mainReportLst.forEach(mainReport -> {
+					if (mainReport != null && mainReport.getSiteId() != null) {
+						Website website = websiteServ.getWebsiteById(mainReport.getSiteId());
+						mainReport.setWebsite(website);
+					}
+				});
+				mainReportList.addAll(mainReportLst);
+				if (mainReportList != null)
+					return ok(com.rage.views.html.index.render(Json.toJson(mainReportList)));
+			}
 		}
 		return ok(com.rage.views.html.index.render(null));
 	}
 
 	public Result contactInfo() {
+		System.out.println("WebsiteTrafficController.contactInfo()");
 		String id = request().getQueryString("id");
+		System.out.println("id ::: " + id);
 		ObjectNode res = Json.newObject();
 		if (id != null) {
 			Website website = websiteServ.getWebsiteById(id);
@@ -107,29 +120,32 @@ public class WebsiteTrafficController extends Controller {
 
 	public Result contactInfoUpdate() {
 		Map<String, String[]> data = request().body().asFormUrlEncoded();
-		
-		
-		
 
+		System.out.println("data ::: " + data);
 		ObjectNode res = Json.newObject();
-		if (data.get("id") == null) {
+		if (data != null && !data.isEmpty() && data.get("id") != null && data.get("id")[0] != null
+				&& data.get("phone") != null && data.get("phone")[0] != null && data.get("email") != null
+				&& data.get("email")[0] != null) {
+			String id = data.get("id")[0];
+			String phone = data.get("phone")[0];
+			String email = data.get("email")[0];
+			Website website = new Website();
+			website.setPhone(phone);
+			website.setEmail(email);
+			boolean isUpdateWebsite = websiteServ.updateWebsite(id, website);
+			if (isUpdateWebsite) {
+				res.put("success", true);
+				res.put("msg", "Updated successfully");
+				return ok(res);
+			} else {
+				res.put("success", false);
+				res.put("msg", "Updated unsuccessfully");
+				return ok(res);
+			}
+		} else {
 			res.put("success", false);
 			res.put("msg", "Invalid data");
 			return ok(res);
-		} else {
-			if (data.get("phone") != null && data.get("phone")[0] != null) {
-				System.out.println("ph:" + data.get("phone")[0]);
-			}
-			if (data.get("email") != null && data.get("email")[0] != null) {
-
-				System.out.println("email:" + data.get("email")[0]);
-			}
-			/* Update contact info here */
-
-			res.put("success", true);
-			res.put("msg", "Updated successfully");
-			return ok(res);
 		}
-
 	}
 }

@@ -86,6 +86,20 @@ public class ReportGenerationUtils {
 				mergeRowHeader(sheet, headerCellStyle, rowNumStart, rowNumEnd, colNumStart, colNumEnd, cellNum,
 						"SITE URL", headerRow);
 			}
+			if (mainReport.getWebsite() != null && mainReport.getWebsite().getEmail() != null) {
+				colNumStart += 1;
+				colNumEnd += 1;
+				cellNum += 1;
+				mergeRowHeader(sheet, headerCellStyle, rowNumStart, rowNumEnd, colNumStart, colNumEnd, cellNum,
+						"EMAIL ID", headerRow);
+			}
+			if (mainReport.getWebsite() != null && mainReport.getWebsite().getPhone() != null) {
+				colNumStart += 1;
+				colNumEnd += 1;
+				cellNum += 1;
+				mergeRowHeader(sheet, headerCellStyle, rowNumStart, rowNumEnd, colNumStart, colNumEnd, cellNum, "PHONE",
+						headerRow);
+			}
 			if (mainReport.getFbFollowers() != null) {
 				colNumStart += 1;
 				colNumEnd += 1;
@@ -235,6 +249,14 @@ public class ReportGenerationUtils {
 		if (mainReport != null) {
 			if (mainReport.getSiteUrl() != null) {
 				setExcelValue(sheet, row, style, mainReport.getSiteUrl(), cellNum);
+			}
+			if (mainReport.getWebsite() != null && mainReport.getWebsite().getEmail() != null) {
+				cellNum += 1;
+				setExcelValue(sheet, row, style, mainReport.getWebsite().getEmail(), cellNum);
+			}
+			if (mainReport.getWebsite() != null && mainReport.getWebsite().getPhone() != null) {
+				cellNum += 1;
+				setExcelValue(sheet, row, style, mainReport.getWebsite().getPhone(), cellNum);
 			}
 			if (mainReport.getFbFollowers() != null) {
 				cellNum += 1;

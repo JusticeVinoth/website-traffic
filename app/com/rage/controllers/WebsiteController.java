@@ -53,7 +53,6 @@ public class WebsiteController extends Controller {
 		Date date = new Date();
 		List<Csv> csvList = csvServ.getCsvList();
 		String fName = csvFile.getFilename();
-		System.out.println("condition 1 ::: " + (csvFile != null && !fName.isEmpty()));
 		if (csvFile != null && !fName.isEmpty()) {
 			int lastIndex = fName.lastIndexOf(".");
 			String fileName = fName.substring(0, lastIndex);
@@ -101,11 +100,11 @@ public class WebsiteController extends Controller {
 		Csv latestCsvData = csvServ.getCsvDetailById(csvDetails.getId().toString());
 		List<CsvWebsiteMapping> csvWebsiteMapping = csvWebsiteMappingServ
 				.getCsvWebsiteMapping(latestCsvData.getId().toString());
-		List<String> websiteUrlList = new ArrayList<>();
+		List<Website> websiteUrlList = new ArrayList<>();
 		csvWebsiteMapping.forEach(website -> {
-			if (website != null && website.getWebsite() != null && !website.getWebsite().getUrl().isEmpty()) {
-				String url = website.getWebsite().getUrl();
-				websiteUrlList.add(url);
+			if (website != null && website.getWebsite() != null && !website.getWebsite().getUrl().isEmpty()
+					&& website.getWebsite().getId() != null) {
+				websiteUrlList.add(website.getWebsite());
 			}
 		});
 		List<MainReport> mainReportList = RootClass.getData(websiteUrlList);
@@ -169,6 +168,8 @@ public class WebsiteController extends Controller {
 				else if (index == 5)
 					website.setWebServer(data);
 				else if (index == 6)
+					website.setPhone(data);
+				else if (index == 7)
 					website.setEmail(data);
 				index++;
 			}
@@ -208,7 +209,16 @@ public class WebsiteController extends Controller {
 		List<MainReport> mainReportList = new ArrayList<>();
 		if (latestCsvData != null && latestCsvData.getId() != null) {
 			String csvId = latestCsvData.getId().toString();
-			mainReportList.addAll(mainReportServ.getMainReport(csvId));
+			List<MainReport> mainReportLst = mainReportServ.getMainReport(csvId);
+			if (mainReportLst != null) {
+				mainReportLst.forEach(mainReport -> {
+					if (mainReport != null && mainReport.getSiteId() != null) {
+						Website website = websiteServ.getWebsiteById(mainReport.getSiteId());
+						mainReport.setWebsite(website);
+					}
+				});
+				mainReportList.addAll(mainReportLst);
+			}
 			if (mainReportList != null) {
 				return ok(com.rage.views.html.index.render(Json.toJson(mainReportList)));
 			}
@@ -224,5 +234,4 @@ public class WebsiteController extends Controller {
 			return ok(com.rage.views.html.upload.render(null));
 		}
 	}
-
 }

@@ -34,4 +34,14 @@ public class WebsiteServiceImpl implements WebsiteService {
 		return websiteRepo.getWebsiteList();
 	}
 
+	@Override
+	public Website getWebsiteById(String id) {
+		return websiteRepo.getWebsiteById(id);
+	}
+
+	@Override
+	public boolean updateWebsite(String id, Website latestWebsite) {
+		return websiteRepo.updateWebsite(id, latestWebsite);
+	}
+
 }

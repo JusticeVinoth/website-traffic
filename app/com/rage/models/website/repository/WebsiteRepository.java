@@ -22,4 +22,8 @@ public interface WebsiteRepository {
 	
 	public List<Website> getWebsiteList();
 	
+	public Website getWebsiteById(String id);
+
+	boolean updateWebsite(String id, Website latestWebsite);
+	
 }
